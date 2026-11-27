@@ -24,10 +24,10 @@ if command -v sha256sum >/dev/null 2>&1; then
 else
   hash_cmd='shasum -a 256'
 fi
-$hash_cmd README.md CHANGELOG.md CITATION.cff .gitignore \
+$hash_cmd README.md CHANGELOG.md CITATION.cff .gitignore LICENSE.md LICENSE-MIT LICENSE-CC-BY-4.0.md \
   paper/manuscript_A.tex paper/references_A.bib paper/manuscript_A.pdf \
   code/README.md code/verificar_A2.py code/conferir_kallat_focal_v0_9_1.py \
   docs/AI_PROVENANCE.md docs/MAIN_RESULTS.md docs/REFERENCES.md docs/REPRODUCIBILITY.md \
   results/README.md results/compilation.log results/verificar_A2.log \
   results/conferir_kallat_focal_v0_9_1.log tools/build_and_verify.sh > results/SHA256SUMS
-echo "Build and finite checks completed; visual inspection, licensing, final metadata and approval still required."
+echo "Build and finite checks completed; visual inspection, final metadata, rights review and approval still required."

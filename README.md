@@ -25,4 +25,4 @@ The author independently conceived the original construction, identified the ini
 
 ## Citation and licensing
 
-Use the version-specific citation metadata after the actual release. No DOI has been assigned here. License terms for the manuscript and code are pending the author's decision; no open license is granted by this staging repository. Publication is not authorized by the presence of these files.
+Use the version-specific citation metadata after the actual release. No DOI has been assigned here. The manuscript and original scientific documentation are licensed under [CC BY 4.0](LICENSE-CC-BY-4.0.md), and the verification and build code under [MIT](LICENSE-MIT), to the extent of rights held by the licensor. See [licensing scope](LICENSE.md) for attribution and third-party material. Publication is not authorized by the presence of these files.

@@ -13,3 +13,7 @@ python3 -I -B code/conferir_kallat_focal_v0_9_1.py
 ```
 
 Use the default configuration (no arguments); the first script uses MB=26, L=10, K=20. Both are expected to report `TOTAL FAILURES: 0`. Historical comments record original development, not release dates. Finite tests are not proofs. See [reproducibility](../docs/REPRODUCIBILITY.md).
+
+## License
+
+The verification programs are distributed under the [MIT License](../LICENSE-MIT), subject to the scope described in [LICENSE.md](../LICENSE.md). The documentation is CC BY 4.0. Keep the license notices when redistributing the programs.

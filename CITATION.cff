@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "Please cite the version of this manuscript that you use."
 title: "Exact p-adic denominator laws and exceptional root interpolation in radical renormalization"
 type: article
+license: "CC-BY-4.0"
 authors:
   - given-names: "Patrick E."
     family-names: "Scuracchio"
