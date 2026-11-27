@@ -12,7 +12,7 @@ python3 -I -B code/verificar_A2.py
 python3 -I -B code/conferir_kallat_focal_v0_9_1.py
 ```
 
-Use the default configuration (no arguments); the first script uses MB=26, L=10, K=20. Both are expected to report `TOTAL FAILURES: 0`. Historical comments record original development, not release dates. Finite tests are not proofs. See [reproducibility](../docs/REPRODUCIBILITY.md).
+Run both scripts without arguments. The first uses MB=26, L=10, K=20. It also accepts `26` and `26 10` as explicit defaults for compatibility. Both programs matched the v0.9.3 copies byte for byte and reported `TOTAL FAILURES: 0` in the v0.9.4 validation. See the [verification outputs](../results/README.md) and [reproducibility instructions](../docs/REPRODUCIBILITY.md) for the finite scope of the checks.
 
 ## License
 

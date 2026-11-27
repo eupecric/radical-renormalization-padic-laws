@@ -1,0 +1,69 @@
+[A] product formula and binomial root; S^r = B for small integer r
+  b_1,b_2,b_3,s_1,s_2 formulas confirmed at R=7/3 (rational, non-integer)
+[B] beta_m(R)=(m+1)! R^m b_(R,m) for m<=26: interpolation on m+1 nodes, checked on 3 extra nodes
+  beta_0(R) = 1*R^0
+  beta_1(R) = -1*R^0 + 1*R^1
+  beta_2(R) = -2*R^0 + 2*R^2
+  beta_3(R) = -1*R^0 + -6*R^1 + 1*R^2 + 6*R^3
+  beta_4(R) = -14*R^0 + -5*R^1 + -10*R^2 + 5*R^3 + 24*R^4
+  beta_5(R) = 59*R^0 + -105*R^1 + -85*R^2 + -15*R^3 + 26*R^4 + 120*R^5
+  beta_6(R) = -636*R^0 + 301*R^1 + -105*R^2 + -455*R^3 + 21*R^4 + 154*R^5 + 720*R^6
+  all integral, deg <= m, consistent on extra nodes (incl. R=-1, 1/2, -5/3)
+[C] finite certificate r=6 (Theorem: pointwise law)
+  m=0: beta_m(6)=1, b_(6,m)=1, s_(6,m)=1
+  m=1: beta_m(6)=5, b_(6,m)=5/12, s_(6,m)=5/72
+  m=2: beta_m(6)=70, b_(6,m)=35/108, s_(6,m)=145/3456
+  m=3: beta_m(6)=1295, b_(6,m)=1295/5184, s_(6,m)=58115/2239488
+  m=4: beta_m(6)=31780, b_(6,m)=1589/7776, s_(6,m)=11973961/644972544
+  m=5: beta_m(6)=959945, b_(6,m)=191989/1119744, s_(6,m)=24199859/1719926784
+  W_5(2) = 3266980965/32768  v_3 = 3  => v_3(2-alpha_1)=3, alpha_1 = 2 mod 27
+[D] symbolic kappa_m(u), W_m(u), F_m(u)=u^(2m) W_m for m<=26
+  Gauss valuations of kappa_m, m=3..26: [3, 2, 4, 3, 6, 7, 10, 8, 10, 9, 12, 13, 15, 14, 16, 14, 18, 19, 21, 20, 22, 21, 24, 25]
+  bound m-2-v3(m):                     [0, 2, 3, 3, 5, 6, 5, 8, 9, 9, 11, 12, 12, 14, 15, 14, 17, 18, 18, 20, 21, 21, 23, 24]
+  omega_q, q=3..25: [1, 2, 2, 3, 4, 3, 4, 5, 5, 6, 7, 7, 8, 9, 8, 9, 10, 10, 11, 12, 12, 13, 14]  v3-content of d_q: [1, 3, 2, 4, 5, 8, 4, 6, 5, 7, 8, 10, 8, 10, 8, 10, 11, 13, 11, 13, 12, 14, 15]
+  symbolic W_m matches 9^m m! s_(3u,m) at u=1,2,4,5,7 (m<=8); F_m checks done
+  F_0(u) = (1)u^0
+  F_1(u) = (-1/2)u^0 + (3/2)u^1
+  F_2(u) = (1/4)u^0 + (-17/4)u^1 + (27/4)u^2 + (45/4)u^3
+  F_3(u) = (-1/8)u^0 + (21/4)u^1 + (-36)u^2 + (27/2)u^3 + (729/8)u^4 + (729/4)u^5
+  F_4(u) = (1/16)u^0 + (-39/8)u^1 + (1353/16)u^2 + (-17019/40)u^3 + (-621/16)u^4 + (6399/8)u^5 + (35235/16)u^6 + (182979/40)u^7
+  F_5(u) = (-1/32)u^0 + (125/32)u^1 + (-4155/32)u^2 + (49833/32)u^3 + (-137889/32)u^4 + (-154305/32)u^5 + (-86265/32)u^6 + (906147/32)u^7 + (1191915/16)u^8 + (623295/4)u^9
+[E] alpha_n mod 3^20 (n<=8): [3486784400, 2563143455, 1437400742, 1059022790, 2925527636, 2231456549, 3002180750, 2444211281, 2907615155]
+  v3(F_(3n+2)(u)) = v3(u-alpha_n) for all integers |u|<=40 (precision 3^20)
+[F] reduced denominators vs the classification table (m<=8)
+  r=2: s_(r,2)=15/128  denominator exponents {2: 7}
+  r=3: s_(r,2)=7/81  denominator exponents {3: 4}
+  r=4: s_(r,2)=133/2048  denominator exponents {2: 11}
+  r=6: s_(r,2)=145/3456  denominator exponents {2: 7, 3: 3}
+  r=9: s_(r,2)=176/6561  denominator exponents {3: 8}
+  r=12: s_(r,2)=3245/165888  denominator exponents {2: 11, 3: 4}
+  r=15: s_(r,2)=259/16875  denominator exponents {3: 3, 5: 4}
+  r=18: s_(r,2)=10591/839808  denominator exponents {2: 7, 3: 8}
+  r=24: s_(r,2)=2737/294912  denominator exponents {2: 15, 3: 2}
+  r=30: s_(r,2)=47531/6480000  denominator exponents {2: 7, 3: 4, 5: 4}
+  r=42: s_(r,2)=42845/8297856  denominator exponents {2: 7, 3: 3, 7: 4}
+  r=105: s_(r,2)=27248/13505625  denominator exponents {3: 2, 5: 4, 7: 4}
+  r=726: s_(r,2)=7893075/27437936768  denominator exponents {2: 7, 3: 0, 11: 8}
+  r=1155: s_(r,2)=321499207/1779622700625  denominator exponents {3: 4, 5: 4, 7: 4, 11: 4}
+  r=2430: s_(r,2)=23932545931/278942752080000  denominator exponents {2: 7, 3: 20, 5: 4}
+  r=726, m=2: v_3(s)=+1, exponent of 3 in reduced denominator = 0
+[G] ratio system in Z_3[[x,v]]/m^10, m=(3,x,v), u=-1+v
+  tails truncated at q<=18 (omega_q >= 10 beyond, so those terms lie in 3^L R)
+  tail certificate: q=2 via exact kappa_3 (d_2 in 27A); omega_q>=10 checked for 19<=q<=199; q>=200: omega_q >= (q-1)/2-log_3(q+1) >= g(200) > 94 (g increasing)
+  fixed point reached from (1,0,1) and from another admissible seed (same limit)
+  identification (B,C,T)(3n,u+1) = W_(3n+c)/W_(3n) mod 3^10: 144 checks
+  reduced identity C(1 - x k1 k2/T) = u^-4 (1+(1+x)u) holds mod 3
+  rho mod (3,x)^10: coefficient of x^i mod 3^(10-i): [59048, 3964, 4880, 1360, 293, 151, 35, 13, 2, 1]
+  a_j = (-1)^(j+1) mod 3 for j<L; chi(0) = (a_1-1)/3 = 1 mod 3; agrees with A1 and historical tables
+  rho(3n) = alpha_n mod 3^10 for n<=8
+[H] Mahler law, pointwise law, isometry (finite ranges)
+  Mahler valuations/residues j<=8; v3(alpha_n-gamma_n)=v3(W(gamma_n))=2+v3(n), 1<=n<=8
+  isometry on 0<=z,w<27; bijection mod 3^(L-1); U15 deficit law for 8 parameters, n<=8
+[I] raw exceptional moments at u=-1 are not in the weighted class; the ratios are (n<=3, mod 243)
+  W_(3n+2)(-1) mod 243: [0, 204, 156, 72]  Delta^3 = 216  v3 = 3
+  W_(3n+2)/W_(3n) at u=-1 mod 243: [0, 195, 84, 72]  Delta^3 = 162  v3 = 4
+  alpha_n mod 3^10 (n<=8): [59048, 3512, 29984, 38024, 3980, 53888, 11492, 55073, 42395]
+  gamma_n mod 3^10: [59048, 14762, 16871, 53144, 40880, 33215, 18647, 2684, 56687]
+
+TOTAL FAILURES: 0
+[time 8.0s]
