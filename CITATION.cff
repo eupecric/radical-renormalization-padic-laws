@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Please cite the version of this manuscript that you use."
+title: "Exact p-adic denominator laws and exceptional root interpolation in radical renormalization"
+type: article
+authors:
+  - given-names: "Patrick E."
+    family-names: "Scuracchio"
+    affiliation: "Independent researcher"
+version: "0.9.4"
+repository-code: "https://github.com/eupecric/radical-renormalization-padic-laws"
+abstract: "Exact denominator laws for the coefficients arising in radical renormalization, and formal 3-adic interpolation of exceptional roots."
+keywords:
+  - p-adic valuations
+  - radical renormalization
+  - Hurwitz series
+  - p-adic interpolation
+  - Mahler differences

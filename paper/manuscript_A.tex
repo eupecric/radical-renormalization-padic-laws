@@ -1,0 +1,900 @@
+% Manuscript v0.9.4 -- preliminary research manuscript.
+% AI systems drafted and revised the manuscript. See Declarations and docs/AI_PROVENANCE.md.
+\documentclass[11pt,reqno]{amsart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage[nameinlink,capitalize]{cleveref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{plain}
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+\newtheorem{maincor}[mainthm]{Corollary}
+\crefname{mainthm}{Theorem}{Theorems}
+\crefname{maincor}{Corollary}{Corollaries}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Zt}{\mathbb Z_3}
+\newcommand{\Zloc}{\mathbb Z_{(3)}}
+\newcommand{\den}{\operatorname{den}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\Hur}{\mathcal H}
+\newcommand{\RR}{\mathscr R}
+\newcommand{\mm}{\mathfrak m}
+\newcommand{\sB}{\mathsf B}
+\newcommand{\sC}{\mathsf C}
+\newcommand{\sT}{\mathsf T}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\fall}[2]{(#1)_{\underline{#2}}}
+\newcommand{\hc}[1]{[z^{[#1]}]}
+\newcommand{\hy}[1]{[y^{[#1]}]}
+\newcommand{\vG}{v_{\mathrm G}}
+
+\title[Exact $p$-adic denominator laws in radical renormalization]{Exact $p$-adic denominator laws and exceptional root interpolation in radical renormalization}
+\author{Patrick E. Scuracchio}
+\address{Independent researcher}
+\thanks{Version 0.9.4, preliminary research manuscript. The author's independent mathematical review of the complete manuscript has not yet been completed. Not peer reviewed. AI involvement is described in the Declarations.}
+\date{Version 0.9.4, 27 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+For an integer $r\ge2$ let $h_r(w)=1-(1-w)^{1/r}$, iterate $y_{n+1}=h_r(ty_n)$ from $y_1=1$, and let $B_r(t)=\lim_n r^ny_{n+1}(t)/t^n$ be the coefficientwise limit; for $0<|t|<1$ this is the value at $1$ of the Koenigs linearizer of $z\mapsto h_r(tz)$. We study the coefficients $s_{r,m}$ of $S_r=B_r^{1/r}$. We prove that $(m+1)!\,R^m[t^m]B_R$ is a polynomial in $\Z[R]$ of degree at most $m$, and we determine, for every prime $p$, the exact exponent of $p$ in the reduced denominator of every $s_{r,m}$. Primes not dividing $r$ never occur. For a prime $p\mid r$ with $a=v_p(r)$, the exponent is $(2a+1)m+v_2(m!)$ if $p=2$, and $2am+v_p(m!)$ if $p$ is odd, with a single exception: if $3\parallel r$, $u=r/3\equiv-1\pmod 3$ and $m=3n+2$, the exponent is $\max\{0,\,2m+v_3(m!)-v_3(u-\alpha_n)\}$, where $\alpha_n\in-1+3\Z_3$ is the unique $3$-adic root of an explicit normalized coefficient polynomial. In particular the odd formula also holds for $3\parallel r$ whenever $m\not\equiv2\pmod3$ or $u\equiv1\pmod3$. As a consequence $s_{r,m}\neq0$ for all $r\ge2$, $m\ge0$. We then construct, by a contracting system for three moment ratios over $\Z_3[[x,v]]$, a series $\rho\in\Z_3[[x]]$ with $\rho(3n)=\alpha_n$ and $\rho\equiv-1/(1+x)\pmod 3$. With the forward difference $\Delta f(n)=f(n+1)-f(n)$, the classical identity $\Delta^jz^k|_{z=0}=j!\,S(k,j)$ for Stirling numbers of the second kind then gives $\Delta^j\alpha_0/(3^j\,j!)\equiv(-1)^{j+1}\pmod 3$, hence $v_3(\Delta^j\alpha_0)=j+v_3(j!)$, for $j\ge1$; and one exact rational coefficient gives $v_3\bigl(\alpha_n+\tfrac1{1+3n}\bigr)=2+v_3(n)$ for $n\ge1$. For fixed parameter, the exceptional deficits are distances in the index variable to a single $3$-adic integer.
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+%======================================================================
+\section{Introduction}\label{sec:intro}
+%======================================================================
+
+\subsection{The family}
+Fix an integer $r\ge2$ and a real number $k>1$, and consider the radical recurrence
+\begin{equation}\label{eq:real-rec}
+g_0=0,\qquad g_{n+1}=\bigl(k^r-k+g_n\bigr)^{1/r},
+\end{equation}
+which increases to its fixed point $k$. For $r=k=2$ one has $g_n=2\cos(\pi/2^{n+1})$, and the renormalized defect $2^{n+1}(2-g_n)^{1/2}$ converges to $\pi$; this is the classical half-angle (Viète-type) computation. In general, with $t=k^{-(r-1)}$ and $e_n=k-g_n$, the quantities $y_{n+1}=e_n/k$ satisfy
+\[
+y_1=1,\qquad y_{n+1}=h_r(ty_n),\qquad h_r(w)=1-(1-w)^{1/r},
+\]
+and the renormalized defects $(rk^{r-1})^ne_n$ converge to $k\,B_r(t)$, where
+\[
+B_r(t)=\lim_{n\to\infty}\frac{r^n\,y_{n+1}(t)}{t^n}=\sum_{m\ge0}b_{r,m}t^m .
+\]
+The limit exists coefficientwise for an indeterminate $t$ (\cref{prop:formal}) and analytically on $|t|<1$ (\cref{thm:analytic}). For $0<|t|<1$, $B_r(t)$ is the value at $z=1$ of the Koenigs linearizer of the attracting germ $z\mapsto h_r(tz)$, whose multiplier is $t/r$ \cite{Koenigs1884,Milnor1991}; nothing new is claimed about this dynamical identification. For real $c\ge2$, Aoki and Kojima relate finite nested square roots arising from iterates of $X^2-c$, and their infinite limits, to values of a Poincar\'e function \cite[Thm.~6.7, Prop.~7.2, and Thm.~7.3]{AokiKojima2016}.
+
+The object of this paper is the arithmetic of the coefficients of
+\[
+S_r(t)=B_r(t)^{1/r}=\sum_{m\ge0}s_{r,m}t^m,\qquad S_r(0)=1 .
+\]
+For $r=2$ one finds $-v_2(s_{2,m})=4m-s_2(m)$, where $s_2(m)$ is the binary digit sum; the sequence $4m-s_2(m)$ is OEIS A120738 \cite{OEISA120738}. We determine the denominators for every $r$ and every prime, and we study in detail the unique exceptional branch.
+
+\subsection{Main results}
+Throughout, $v_p$ is the $p$-adic valuation with $v_p(0)=+\infty$; for a rational number $s$ we write $\den(s)$ for its reduced denominator, with $\den(0)=1$. The exponent of $p$ in $\den(s)$ is $\max\{0,-v_p(s)\}$; the distinction between this exponent and the signed valuation $v_p(s)$ matters in \cref{thmA} (see \cref{ex:726}).
+
+\begin{mainthm}[Denominator classification]\label{thmA}
+Let $r\ge2$ and $m\ge0$ be integers. Then $s_{r,m}\ne0$ and
+\[
+\den(s_{r,m})=\prod_{p\mid r}p^{\,e_p(r,m)},
+\]
+where, for each prime $p\mid r$ and with $a=v_p(r)\ge1$,
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+case & $e_p(r,m)$\\
+\midrule
+$p=2$ & $(2a+1)m+v_2(m!)$\\
+$p$ odd, and $p\ge5$ or $a\ge2$ & $2am+v_p(m!)$\\
+$p=3$, $a=1$, $m\not\equiv2\pmod 3$ & $2m+v_3(m!)$\\
+$p=3$, $a=1$, $m=3n+2$, $u=r/3$ & $\max\bigl\{0,\;2m+v_3(m!)-v_3(u-\alpha_n)\bigr\}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Here $\alpha_n$ is the unique root in $\Z_3$ of the polynomial $F_{3n+2}\in\Zloc[u]$ of \cref{thm:normalform}; it satisfies $\alpha_n\equiv-1\pmod3$ and $\alpha_0=-1$. In the last line $v_3(u-\alpha_n)=0$ when $u\equiv1\pmod3$, while for each fixed $n$ every value $v_3(u-\alpha_n)=K\ge1$ is attained by infinitely many positive integers $u\equiv-1\pmod 3$.
+\end{mainthm}
+
+The proof (\cref{sec:hurwitz,sec:nonexc,sec:simple3}) rests on a single integrality statement: $\beta_m(R)=(m+1)!R^m b_{R,m}$ is a polynomial in $\Z[R]$ of degree $\le m$ (\cref{thm:beta}). Writing $S_r(p^\gamma x)=\exp L(x)$ in divided powers (Hurwitz series), this makes the logarithm $L$ integral at the correct scale. Its reduction modulo $p$ is then linear, except for the simple prime $3$, where a quadratic term survives. Non-vanishing of $s_{r,m}$ is immediate because every integer $r\ge2$ has at least one non-exceptional prime divisor or equals $3$ (\cref{cor:nonvanishing}). The restriction to positive integers $r$ is essential: as a polynomial identity, the exceptional factor vanishes at $u=\alpha_0=-1$.
+
+The second part concerns the exceptional roots $\alpha_n$. They are the $3$-adic zeros of the \emph{parameter} $u=r/3$ in the coefficient functions $W_{3n+2}(u)=9^{3n+2}(3n+2)!\,s_{3u,3n+2}$. They vary with the index $n$.
+
+\begin{mainthm}[Interpolation of the exceptional roots]\label{thmB}
+There is a unique $\rho\in\Z_3[[x]]$ with $\rho(0)=-1$ that is a zero of the explicit normalized equation of \cref{thm:rho}. It satisfies
+\[
+\rho(3n)=\alpha_n\quad(n\ge0),\qquad \rho(x)=-\frac1{1+x}+3x\,\chi(x)\quad\text{with }\chi\in\Z_3[[x]],\ \chi(0)\equiv1\pmod 3 .
+\]
+Consequently $\alpha(z)=\rho(3z)$ is the unique continuous function $\Z_3\to\Z_3$ with $\alpha(n)=\alpha_n$, and, with the forward difference $\Delta f(n)=f(n+1)-f(n)$ (so $\Delta^j\alpha_0=\sum_{i=0}^j(-1)^{j-i}\binom ji\alpha_i$), for all $j\ge1$ and $n\ge1$
+\[
+\frac{\Delta^j\alpha_0}{3^j\,j!}\equiv(-1)^{j+1}\pmod 3,\qquad v_3(\Delta^j\alpha_0)=j+v_3(j!),\qquad
+v_3\Bigl(\alpha_n+\frac1{1+3n}\Bigr)=2+v_3(n).
+\]
+Moreover $\alpha_n\equiv-1+3n+9\binom n2\equiv4^n-2\pmod{27}$ for all $n\ge0$.
+\end{mainthm}
+
+One difficulty is that $n\mapsto W_{3n+2}(u)$ need not have the Mahler regularity of $\alpha$: at $u=-1$ its values are not those of any element of the weighted class $\cA$ of \cref{thm:rho} (\cref{rem:raw}). We therefore interpolate the three ratios $W_{3n+c}/W_{3n}$, $c=1,2,3$, simultaneously in the index $x=3n$ and the parameter $v=u+1$, by a contracting system over the complete local ring $\Z_3[[x,v]]$ (\cref{sec:ratios}). The input is a symbolic filtration of the cumulants of $S_{3u}(9y)$ (\cref{sec:cumulants}). The Mahler law is then a short corollary of the identity $\Delta^jz^k|_{z=0}=j!\,S(k,j)$ for finite differences of monomials, with Stirling numbers of the second kind. The pointwise law needs one more piece of information, $\chi(0)\equiv1\pmod 3$; we obtain it from the exact value $s_{6,5}=24199859/(2^{18}3^8)$ (\cref{sec:mahler}).
+
+Since $\alpha$ is an isometry up to the factor $3$, the parametric statement can be inverted.
+
+\begin{maincor}[Index form of the exceptional deficit]\label{corC}
+The map $\alpha\colon\Z_3\to-1+3\Z_3$ is a bijection with $v_3(\alpha(z)-\alpha(w))=1+v_3(z-w)$. For $u\in-1+3\Z_3$ put $\eta(u)=\alpha^{-1}(u)$. Then for all $n\ge0$
+\[
+v_3\bigl(W_{3n+2}(u)\bigr)=1+v_3\bigl(n-\eta(u)\bigr).
+\]
+\end{maincor}
+
+Thus, for a fixed root order $r=3u$, with $u$ a positive integer and $u\equiv-1\pmod3$, the exceptional deficits along $m=3n+2$ measure the $3$-adic distance from $n$ to a single $3$-adic integer $\eta(u)$, which for such $u$ is never a natural number (\cref{cor:index}(iv)). For general $u\in-1+3\Z_3$ this exclusion fails; for instance $\eta(-1)=0$.
+
+\subsection{Relation to the literature and scope}\label{subsec:lit}
+The dynamical side is classical. Koenigs linearization \cite{Koenigs1884,Milnor1991} identifies $B_r(t)$ with an evaluation of the linearizer. Combinatorial expansions of the formal conjugacies in Schröder's and Poincaré's equations, in terms of trees, are studied by Menous, Novelli and Thibon \cite{MNT2017}. Formal linearization in the non-archimedean setting is treated, for example, by Lubin \cite[Prop.~1.2]{Lubin1994}. Exact formulas for the absolute values of the coefficients of $p$-adic linearizations are known in other regimes. For example, for $f(x)=\lambda x+a_2x^2$ over $\mathbb C_p$, $p$ odd, with $\lambda$ not a root of unity and $p^{-1}<|1-\lambda|<1$ (an indifferent fixed point), Lindahl gives the absolute values of the coefficients of the linearizing conjugacy, where small divisors $1-\lambda^n$ govern the arithmetic \cite[Thm.~5.1]{Lindahl2009}. In our setting the multiplier $t/r$ is a formal parameter, and we study the coefficients in $t$ of the evaluation $K_t(1)^{1/r}$, not the coefficients of the conjugacy in $z$. Salerno and Silverman prove, under explicit hypotheses on the germ, factorial integrality for Böttcher coordinates of superattracting germs \cite{SalernoSilverman2020}. \Cref{thm:beta} has a similar shape, but superattracting germs have multiplier $0$ and are not formally conjugate to the germs considered here. We do not know whether \cref{thm:beta} can be deduced from general results on Schröder–Koenigs coefficients. We use the ring of Hurwitz series \cite[\S2]{Keigher1997} and the set-partition formulas proved in \cref{lem:hurwitz}. Other classical tools include Legendre's formula \cite[Ch.~V, \S3.1]{Robert2000}, the von Staudt–Clausen theorem \cite[Ch.~15, \S1, Thm.~3]{IrelandRosen1990}, and Hensel's lemma \cite[Ch.~I, \S6.4]{Robert2000}.
+
+Mahler describes continuous functions on $\Z_p$ by binomial expansions with finite-difference coefficients \cite[Thm.~1]{Mahler1958}. Amice gives criteria for local analyticity in polynomial bases \cite[Ch.~III, Thms.~2 and 3]{Amice1964}. O'Desky and Richman give a criterion for $p$-adic continuity of a sequence with initial value $1$ and $p$-integral ``$m$-values'' in degrees $k\ge2$ \cite{ODeskyRichman2023}. Their $m$-values encode the logarithm of the exponential generating function. Poonen interpolates analytically in $n$ the iterates $f^{\circ n}(x)$ of a self-map given by restricted power series that is congruent to the identity modulo $p^c$, $c>1/(p-1)$ \cite[Thm.~1]{Poonen2014}. Our construction does not start from such a self-map: the roots $\alpha_n$ are obtained through the moment ratios. A posteriori, \cref{corC} shows that $\alpha_{n+1}=f(\alpha_n)$ for the self-map $f=\alpha\circ(z\mapsto z+1)\circ\eta$ of $-1+3\Z_3$; we have not examined whether $f$ satisfies the hypotheses of \cite{Poonen2014}, and nothing below depends on this.
+
+Kallat studies congruences for weighted permutation sequences \cite{Kallat2026b} and, in \cite{Kallat2026a}, the $p$-adic valuations of the coefficients of $F_C(y)T(y)$, where $F_C(y)=\exp\bigl(\sum_{d\in C}y^d/d\bigr)$ is the exponential generating function of permutations with all cycle lengths in a set $C$ and $T\in\mathbb Z_{(p)}[[y]]$ is a weight series. In the Euler product $F_C=\prod_{m\ge1}(1-y^m)^{-c_m}$, each factor whose exponent $c_m$ has negative $p$-adic valuation is assigned an explicit efficiency, a cost per unit of degree \cite[\S\S8.1, 8.8]{Kallat2026a}. If one such factor is strictly the most efficient, \cite[Thm.~12.1]{Kallat2026a} interpolates, in each residue class of the index modulo its degree, the coefficients divided by an explicit binomial factor, by a locally analytic function of the quotient of the index by that degree. On a disc where this function is not identically zero, a zero of multiplicity $\mu$ gives a local valuation law of slope $\mu$ \cite[Cor.~12.2]{Kallat2026a}. In \cite[Thm.~12.4]{Kallat2026a}, $Q_n$ for $n\ge3$ counts permutations on $n$ letters with all cycle lengths at least $3$, with the count divided by $(n-1)(n-2)$. Fix an odd prime $p$ and $3\le n_0\le p+2$ with $v_p(Q_{n_0})=1$. For the progression $n_0+pq$, the normalized interpolant of Theorem~12.1 divided by $p$ reduces modulo $p$ to an affine function. If its linear coefficient is nonzero, $v_p(Q_{n_0+pq})=1+v_p(q-q^\ast)$ for every $q\in\N$, with a unique $q^\ast\in\Z_p\setminus\N$. If the linear coefficient vanishes, $v_p(Q_{n_0+pq})=1$ for every $q\in\N$.
+
+Our cumulant estimates (\cref{prop:kappa,thm:filtration}) show that \cite[Thm.~12.1]{Kallat2026a} applies to $H_u(y)=S_{3u}(9y)$ for each rational $u\in-1+3\Z_3$, with $C=\{1\}\cup\{2\cdot3^j:j\ge1\}$, an integral weight series, and a most efficient factor of degree $3$; note that $3\notin C$. For fixed $u$ the theorem then gives locally analytic interpolants of the three moment ratios $W_{3n+c}/W_{3n}$, $c=1,2,3$. Kallat's explicit series, combined with a few further coefficient estimates for this family, also gives, for every $u\in-1+3\Z_3$, a second derivation of the valuation formula of \cref{corC}. Both statements are obtained at the end of \cref{sec:cumulants}, in the disc coordinates $n$ and $(u+1)/3$, by restricted power series. Our proof in \cref{sec:ratios} works instead with integral formal series in the coordinates $x=3n$ and $v=u+1$: it constructs the ratios over $\Z_3[[x,v]]$ and determines the full reduction of $\rho(x)$ modulo $3$. \Cref{thmB} rests on this formal control. The comparison recovers the fixed-parameter interpolation of the ratios and the index law, and no other part of the paper depends on it. We claim no priority for the form of the index law.
+
+What we do claim is narrow and specific to the family $S_r$: the polynomiality \cref{thm:beta}; the complete prime-by-prime denominator classification \cref{thmA}, with its unique exceptional branch; and the construction of $\rho$ with the consequences in \cref{thmB} and \cref{corC}. Positivity of the $s_{r,m}$, numerators at primes not dividing $r$, irrationality questions and generalizations to other moment systems are not treated.
+
+\subsection{Organization and conventions}
+\Cref{sec:formal} constructs $B_R$ and $S_R$ for an indeterminate $R$ and realizes them analytically. \Cref{sec:hurwitz} proves the Hurwitz lemma, \cref{thm:beta} and localization. \Cref{sec:nonexc} proves the non-exceptional laws, and \cref{sec:simple3} treats $3\parallel r$ and completes \cref{thmA}. \Cref{sec:cumulants,sec:ratios} construct $\rho$, and \cref{sec:mahler} derives the finite-difference and pointwise laws. \Cref{sec:examples} collects exact tables and describes the code.
+
+We write $\N=\{0,1,2,\dots\}$; natural numbers include $0$. Letters are used as follows. $R$ is an indeterminate and $r$ an integer. $t$ is the formal variable of $B_R$. In \cref{sec:simple3,sec:cumulants,sec:ratios}, $u$ is an indeterminate with $r=3u$, $y$ is the generating variable of $H_u(y)=S_{3u}(9y)$, $x$ is the scaled index ($x=3n$) and $v=u+1$. We write $A=\Zloc[u,u^{-1}]$ and $D=-1+3\Z_3$. Falling factorials are $\fall Xq=X(X-1)\cdots(X-q+1)$, with $\fall X0=1$. Iterates are always written with a subscript, $y_n(t)$, so they cannot be confused with the variable $y$; coefficients of auxiliary series are written $\tilde b_i$, not $y_i$. The symbol $F_m$ ($m\ge0$) denotes the normalized polynomial of \cref{thm:normalform}; the iterates in $z$ used in \cref{sec:hurwitz} are written $\Psi_n$.
+
+%======================================================================
+\section{Formal construction and analytic realization}\label{sec:formal}
+%======================================================================
+
+\subsection{The formal iteration}
+Let $R$ be an indeterminate and put
+\[
+\lambda_q(R)=\prod_{i=1}^{q-1}(iR-1)\in\Z[R]\quad(\lambda_1=1),\qquad
+h_R(w)=\sum_{q\ge1}\frac{\lambda_q(R)}{R^q\,q!}\,w^q,
+\]
+\[
+P_R(w)=\frac{R\,h_R(w)}{w}=\sum_{j\ge0}\frac{\lambda_{j+1}(R)}{R^j(j+1)!}w^j .
+\]
+For a rational number $r\ne0$, specialization $R\mapsto r$ gives
+\[
+h_r(w)=1-(1-w)^{1/r}=-\sum_{q\ge1}\binom{1/r}{q}(-w)^q,
+\]
+because $-\binom{1/r}{q}(-1)^q=\lambda_q(r)/(r^qq!)$. All series below have coefficients in $\Q[R,R^{-1}]$. Specialization $R\mapsto r$ is a ring homomorphism $\Q[R,R^{-1}]\to\Q$, and every coefficient in a fixed degree is obtained by finitely many ring operations. Hence specialization commutes with all constructions below, degree by degree.
+
+\begin{proposition}[Formal stabilization]\label{prop:formal}
+In $\Q[R,R^{-1}][[t]]$ define $y_1=1$, $y_{n+1}=h_R(ty_n)$ and $B_{R,n}=R^n y_{n+1}/t^n$ (so $B_{R,0}=1$). Then for $n\ge0$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $y_{n+1}=R^{-n}t^n+O(t^{n+1})$ and $y_{n+2}=(t/R)\,y_{n+1}+O(t^{2n+2})$;
+\item $B_{R,n+1}-B_{R,n}=O(t^{n+1})$; hence $[t^m]B_{R,n}$ is independent of $n$ for $n\ge m$, and $B_R=\sum_m b_{R,m}t^m$, $b_{R,m}=[t^m]B_{R,m}$, is the $t$-adic limit;
+\item $B_{R,n}=\prod_{i=1}^nP_R(ty_i)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Since $h_R(w)=w/R+O(w^2)$, (i) follows by induction: if $y_{n+1}=R^{-n}t^n+O(t^{n+1})$, then $ty_{n+1}$ has order $n+1$ and $y_{n+2}=h_R(ty_{n+1})=(t/R)y_{n+1}+O(t^{2n+2})$. Multiplying the last identity by $R^{n+1}t^{-n-1}$ gives (ii). For (iii), $h_R(w)=(w/R)P_R(w)$ gives $y_{i+1}=(t/R)\,y_iP_R(ty_i)$, hence $y_{n+1}=(t/R)^n\prod_{i=1}^nP_R(ty_i)$.
+\end{proof}
+
+Since $B_R(0)=1$, the series $S_R=\exp\bigl(R^{-1}\log B_R\bigr)=\sum_m s_{R,m}t^m$ is defined. For $R\mapsto r$ an integer, $S_r$ is the unique series with constant term $1$ and $S_r^r=B_r$: if $S,S'$ are two such series, then $r\log(S/S')=0$, so $S=S'$. The coefficients $b_{R,m},s_{R,m}$ lie in $\Q[R,R^{-1}]$, and we write $b_{r,m},s_{r,m}$ for their specializations.
+
+\begin{remark}[Index conventions]\label{rem:index}
+Some earlier drafts used $\widehat y_0=1$, $\widehat y_{n+1}=h_R(t\widehat y_n)$ and $R^n\widehat y_n/t^n$. By induction $\widehat y_n=y_{n+1}$, so both conventions give the same $B_{R,n}$ with the same $n$, and the same coefficients.
+\end{remark}
+
+\begin{proposition}[First coefficients]\label{prop:first}
+Write $P_R(w)=1+c_1w+c_2w^2+c_3w^3+\cdots$, so $c_i=\lambda_{i+1}(R)/(R^i(i+1)!)$. Then $b_{R,1}=c_1$, $b_{R,2}=c_2+c_1/R$, $b_{R,3}=c_3+2c_1^2/R+c_1/R^2$, that is
+\[
+b_{R,1}=\frac{R-1}{2R},\qquad b_{R,2}=\frac{R^2-1}{3R^2},\qquad b_{R,3}=\frac{(R^2-1)(6R+1)}{24R^3},
+\]
+and
+\[
+s_{R,1}=\frac{R-1}{2R^2},\qquad s_{R,2}=\frac{(R-1)(R+3)(5R-1)}{24R^4}.
+\]
+\end{proposition}
+
+\begin{proof}
+In \cref{prop:formal}(iii), $y_1=1$, $y_2=t/R+c_1t^2/R+O(t^3)$ and $y_3=t^2/R^2+O(t^3)$. Since $y_i$ has order $i-1$, only $i\le3$ contribute up to $t^3$, and
+\[
+B_R\equiv(1+c_1t+c_2t^2+c_3t^3)\Bigl(1+\tfrac{c_1}{R}t^2+\tfrac{c_1^2}{R}t^3\Bigr)\Bigl(1+\tfrac{c_1}{R^2}t^3\Bigr)\pmod{t^4}.
+\]
+This gives the three formulas for $b$. Next, $\log B_R=b_1t+(b_2-b_1^2/2)t^2+O(t^3)$, and $S_R=\exp(R^{-1}\log B_R)$ gives $s_1=b_1/R$ and $s_2=(b_2-b_1^2/2)/R+b_1^2/(2R^2)$. Substituting yields the stated closed forms.
+\end{proof}
+
+\subsection{Analytic realization}
+
+\begin{theorem}[Analytic realization]\label{thm:analytic}
+Let $r\ge2$ be an integer.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The functions $B_{r,n}(t)$ are holomorphic on $|t|<1$ and converge locally uniformly there to a nowhere-vanishing holomorphic function whose Taylor series is the formal $B_r$. The same holds for $S_r=\exp(r^{-1}\log B_r)$, with the branch normalized by $S_r(0)=1$. Both Taylor series have radius of convergence exactly $1$.
+\item For $0<|t|<1$ let $K_t$ be the Koenigs linearizer of $f_t(z)=h_r(tz)$ at $0$, normalized by $K_t(z)=z+O(z^2)$ and $K_t\circ f_t=(t/r)K_t$, and extended along the orbit of $1$. Then $B_r(t)=K_t(1)$. At $t=0$ one simply has $B_r(0)=1$.
+\item For real $k>1$ and $t=k^{-(r-1)}$, the recurrence \eqref{eq:real-rec} satisfies $y_{n+1}(t)=e_n/k$ with $e_n=k-g_n\in(0,k]$, $e_n\to0$, and
+\[
+T_n:=(rk^{r-1})^ne_n\longrightarrow T_\infty=k\,B_r(t),\qquad
+C_r(k):=\lim_{n\to\infty}(rk^{r-1})^{(n+1)/r}e_n^{1/r}=r^{1/r}\,k\,S_r(t).
+\]
+For $r=k=2$ one has $C_2(2)=\pi$, that is, $S_2(1/2)=\pi/(2\sqrt2)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) For $|w|<1$ let $a=(1-w)^{1/r}$ be the principal branch. Then $\operatorname{Re}(1-w)>0$, so $|\arg a|<\pi/(2r)$ and each $a^j$, $0\le j\le r-1$, has positive real part. From $(1-a)(1+a+\cdots+a^{r-1})=w$ we get $h_r(w)/w=1/(1+a+\cdots+a^{r-1})$, and $|1+a+\cdots+a^{r-1}|\ge\operatorname{Re}(1+a+\cdots+a^{r-1})>1$. Hence $|h_r(w)|<|w|$ for $0<|w|<1$, and $h_r(w)\ne0$ for $w\ne0$. Since $h_r(w)/w\to1/r$ at $0$, compactness gives, for every $0<\delta<1$, a constant $q=q(r,\delta)<1$ with $|h_r(w)|\le q|w|$ on $|w|\le\delta$.
+
+For $|t|<1$ define $y_n(t)$ by the recurrence. Inductively $|y_n(t)|\le1$, so $|ty_n|<1$ and $y_{n+1}=h_r(ty_n)$ is holomorphic; its Taylor series is the formal $y_{n+1}$. Only the initial iterate equals $1$; for $t\ne0$ all later iterates satisfy $|y_n|<1$. On $|t|\le\delta$ we have $|y_{n+1}(t)|\le q\delta|y_n(t)|$, hence $|y_{n+1}(t)|\le(q\delta)^n$. Since $|P_r(w)-1|\le c|w|$ on $|w|\le\delta$, the series $\sum_i|P_r(ty_i)-1|$ converges uniformly on $|t|\le\delta$. All factors are non-zero, because $h_r(w)\ne0$ for $w\ne0$ and $P_r(0)=1$. So the product $\prod_iP_r(ty_i)$ of \cref{prop:formal}(iii) converges uniformly on compact subsets to a nowhere-vanishing holomorphic function. By \cref{prop:formal}(ii) the $m$-th Taylor coefficient of $B_{r,n}$ equals $b_{r,m}$ for $n\ge m$, and by Cauchy's formula the Taylor coefficients of the limit are the limits of those of $B_{r,n}$. On the simply connected disc, $\log B_r$ has a holomorphic branch vanishing at $0$, so $S_r$ is holomorphic and nowhere zero, and its Taylor series is the formal one.
+
+For real $t\in(0,1)$ all $y_i(t)$ lie in $(0,1]$. Moreover $P_r(w)=r/(1+a+\cdots+a^{r-1})>1$ for $w\in(0,1)$, since then $a\in(0,1)$. For fixed $i$, $y_i(t)\to1$ as $t\to1^-$, because $h_r$ is continuous on $[0,1]$ with $h_r(1)=1$; hence $P_r(ty_i(t))\to P_r(1)=r$. Thus $B_r(t)\ge\prod_{i\le N}P_r(ty_i(t))\to r^N$ for every $N$, so $B_r(t)\to+\infty$ and $S_r(t)=B_r(t)^{1/r}\to+\infty$. A power series of radius $>1$ would be bounded near $t=1$. Both radii are therefore exactly $1$. This divergence on the positive axis says nothing about a natural boundary, and none is claimed.
+
+(ii) For $0<|t|<1$, $f_t(0)=0$ and $f_t'(0)=t/r$ with $0<|t/r|<1$. Koenigs' theorem \cite{Koenigs1884}, \cite[\S6, Thm.~6.1]{Milnor1991} gives a unique $K_t$, holomorphic near $0$, with $K_t(z)=z+O(z^2)$ and $K_t\circ f_t=(t/r)K_t$. The orbit $f_t^{\circ n}(1)=y_{n+1}(t)$ tends to $0$ and avoids $0$. Put $K_t(1)=(t/r)^{-N}K_t(y_{N+1})$ for $N$ large; this is independent of $N$ by the functional equation. Since $K_t(w)/w\to1$, we get $K_t(1)=\lim_N(r/t)^Ny_{N+1}\cdot K_t(y_{N+1})/y_{N+1}=\lim_NB_{r,N}(t)=B_r(t)$. At $t=0$ the multiplier vanishes and the formula is not used.
+
+(iii) From $g_{n+1}^r=k^r-k+g_n$ we get $(k-e_{n+1})^r=k^r-e_n$, that is, $e_{n+1}/k=h_r(e_n/k^r)=h_r(t\,e_n/k)$. Also $e_0/k=1$. The real root is the principal branch on $[0,1)$, and $e_n/k^r\le k^{1-r}<1$. So $y_{n+1}=e_n/k$ is the real iterate of (i). Since $0\le1-(1-w)^{1/r}\le w$ on $[0,1]$, we have $0<e_{n+1}\le e_n/k^{r-1}$, so $e_n\to0$ geometrically. Next, $T_n=(rk^{r-1})^ne_n=k\,r^ny_{n+1}(t)/t^n=k\,B_{r,n}(t)\to k\,B_r(t)$, and $(rk^{r-1})^{(n+1)/r}e_n^{1/r}=(rk^{r-1})^{1/r}T_n^{1/r}\to r^{1/r}k\,B_r(t)^{1/r}$. On $[0,1)$ the holomorphic $S_r$ is real and positive, so it equals the positive root. For $r=k=2$, half-angle gives $g_n=2\cos(\pi/2^{n+1})$, $e_n=4\sin^2(\pi/2^{n+2})$, and $4^{(n+1)/2}e_n^{1/2}=2^{n+2}\sin(\pi/2^{n+2})\to\pi$.
+\end{proof}
+
+%======================================================================
+\section{Hurwitz series, polynomial integrality and localization}\label{sec:hurwitz}
+%======================================================================
+
+\subsection{Hurwitz series}
+Let $\mathcal O$ be a commutative ring with $1$ that is torsion-free as a $\Z$-module. We regard $\mathcal O\subset\mathcal O_\Q=\mathcal O\otimes\Q$, and put
+\[
+\Hur_{\mathcal O}=\Bigl\{\sum_{N\ge0}a_N\frac{z^N}{N!}:a_N\in\mathcal O\Bigr\}\subset\mathcal O_\Q[[z]],\qquad
+\Hur^+_{\mathcal O}=\{F\in\Hur_{\mathcal O}:a_0=0\}.
+\]
+For $F\in\mathcal O_\Q[[z]]$ write $\hc NF=N!\,[z^N]F$ for the Hurwitz coefficients, and $z^{[N]}=z^N/N!$. One always has $z\Hur_{\mathcal O}\subseteq\Hur^+_{\mathcal O}$, and the inclusion may be strict: over $\mathcal O=\Z$ the degree-$2$ Hurwitz coefficient of $zF$ is $2\hc1F$, so $z^{[2]}\in\Hur^+_\Z\setminus z\Hur_\Z$; over $\mathcal O=\Q$ the two sets coincide. Only the condition $F(0)=0$ is used below. For an ideal $I\subset\mathcal O$ and $F,G\in\Hur_{\mathcal O}$ we write $F\equiv G\pmod I$ when \emph{all Hurwitz coefficients} of $F-G$ lie in $I$. For a principal ideal $I=c\mathcal O$ this says $F-G\in c\,\Hur_{\mathcal O}$; only principal ideals are used below.
+
+\begin{lemma}[Hurwitz lemma]\label{lem:hurwitz}
+\leavevmode
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\Hur_{\mathcal O}$ is a subring of $\mathcal O_\Q[[z]]$, stable under $d/dz$ (with $\hc N F'=\hc{N+1}F$) and under multiplication by $z^k$, $k\ge0$.
+\item If $F\in\Hur^+_{\mathcal O}$ has Hurwitz coefficients $f_j$, then for $q\ge0$ and $N\ge0$
+\[
+\hc N\frac{F^q}{q!}=\sum_{\pi}\prod_{B\in\pi}f_{|B|},
+\]
+where $\pi$ runs over the set partitions of $\{1,\dots,N\}$ into exactly $q$ blocks. In particular $F^q/q!\in\Hur_{\mathcal O}$, its Hurwitz coefficients are polynomials with non-negative integer coefficients in the $f_j$, and $\hc N(F^q/q!)=0$ for $q>N$.
+\item For $F\in\Hur^+_{\mathcal O}$, $\exp F=\sum_qF^q/q!\in1+\Hur^+_{\mathcal O}$ with $\hc N\exp F=\sum_{\pi}\prod_{B\in\pi}f_{|B|}$ over all set partitions of $\{1,\dots,N\}$, and $\log(1+F)=\sum_{q\ge1}(-1)^{q-1}(q-1)!\,F^q/q!\in\Hur^+_{\mathcal O}$.
+\item Let $I\subset\mathcal O$ be an ideal. If $F\equiv F'$ and $G\equiv G'\pmod I$, then $FG\equiv F'G'$. If moreover $F,F'\in\Hur^+_{\mathcal O}$, then $F^q/q!\equiv F'^q/q!$, $\exp F\equiv\exp F'$ and $\log(1+F)\equiv\log(1+F')\pmod I$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) $z^{[i]}z^{[j]}=\binom{i+j}{i}z^{[i+j]}$ and $z^kz^{[N]}=\frac{(N+k)!}{N!}z^{[N+k]}$; differentiation shifts Hurwitz coefficients. (ii) By the multinomial theorem, $N![z^N]F^q=\sum_{j_1+\cdots+j_q=N,\ j_i\ge1}\frac{N!}{j_1!\cdots j_q!}f_{j_1}\cdots f_{j_q}$. This is the sum over \emph{ordered} $q$-tuples of disjoint non-empty blocks covering $\{1,\dots,N\}$. Each partition into $q$ blocks arises from exactly $q!$ orderings. The sum is finite, and empty when $q>N$. (iii) In degree $N$ only $q\le N$ contribute; sum (ii) over $q$, and note $1/q=(q-1)!/q!$. (iv) The Hurwitz coefficients of products are integral bilinear expressions, and those in (ii)--(iii) are integral polynomials in the $f_j$. Reduction modulo $I$ commutes with integral polynomials.
+\end{proof}
+
+\begin{remark}
+The hypothesis $F(0)=0$ in (ii) is necessary: $F=1$ gives $F^2/2!=1/2\notin\Hur_\Z$. The divided powers $F^q/q!$ are defined in $\mathcal O_\Q[[z]]$, where $q!$ is invertible, and then shown to be integral. One never divides by $q!$ in a ring of characteristic $p$.
+\end{remark}
+
+\subsection{Polynomial integrality}
+
+\begin{theorem}[Factorial polynomiality]\label{thm:beta}
+For every $m\ge0$,
+\[
+\beta_m(R):=(m+1)!\,R^m\,b_{R,m}\in\Z[R],\qquad \deg\beta_m\le m,\qquad \beta_0=1 .
+\]
+Consequently, for every integer $r\ge2$ and prime $p$, $v_p(b_{r,m})\ge-m\,v_p(r)-v_p((m+1)!)$.
+\end{theorem}
+
+\begin{proof}
+Put $Z_n(z)=B_{R,n}(Rz)$ and $\Psi_n=zZ_n$, so $\Psi_0=z$. From $y_{n+1}=t^nB_{R,n}/R^n$ and the expansion of $h_R$,
+\[
+B_{R,n+1}=\frac{R^{n+1}}{t^{n+1}}\sum_{q\ge1}\frac{\lambda_q(R)}{R^qq!}\,t^q\Bigl(\frac{t^n}{R^n}B_{R,n}\Bigr)^q
+=\sum_{q\ge1}\frac{\lambda_q(R)}{q!}\Bigl(\frac tR\Bigr)^{(n+1)(q-1)}B_{R,n}^q .
+\]
+Substituting $t=Rz$ and multiplying by $z$ gives the exact recurrence
+\begin{equation}\label{eq:Frec}
+\Psi_{n+1}=\sum_{q\ge1}\lambda_q(R)\,z^{n(q-1)}\frac{\Psi_n^q}{q!},
+\end{equation}
+since $(n+1)(q-1)+1-q=n(q-1)$. We show by induction on $n$ that $\Psi_n\in\Hur^+_{\Z[R]}$ and that $\deg_R\hc N\Psi_n\le N-1$ for all $N\ge1$. For $\Psi_0=z$ this is clear. Assume it for $\Psi_n$. By \cref{lem:hurwitz}(i)--(ii), each term of \eqref{eq:Frec} lies in $\Hur_{\Z[R]}$. The $q$-th term has order at least $n(q-1)+q$, so the sum is finite in each degree and has constant term $0$. In degree $N$, the $q$-th term contributes $\lambda_q(R)\frac{N!}{N'!}\hc{N'}(\Psi_n^q/q!)$ with $N'=N-n(q-1)\le N$. By \cref{lem:hurwitz}(ii), $\hc{N'}(\Psi_n^q/q!)$ is a sum of products $\prod_{B}f_{|B|}$, $f_j=\hc j\Psi_n$, over partitions of $\{1,\dots,N'\}$ into $q$ blocks. By induction each such product has degree at most $\sum_B(|B|-1)=N'-q$. Since $\deg\lambda_q=q-1$, the contribution has degree at most $N'-1\le N-1$.
+
+Finally $\hc{m+1}\Psi_n=(m+1)!\,[z^m]Z_n=(m+1)!\,R^m[t^m]B_{R,n}$, which equals $\beta_m(R)$ for $n\ge m$ by \cref{prop:formal}(ii). The valuation bound follows from $b_{r,m}=\beta_m(r)/((m+1)!\,r^m)$ with $\beta_m(r)\in\Z$.
+\end{proof}
+
+The first values are (see \cref{sec:examples} for their verification)
+\begin{equation}\label{eq:betas}
+\begin{aligned}
+\beta_1&=R-1,\qquad \beta_2=2(R^2-1),\qquad \beta_3=(R^2-1)(6R+1),\\
+\beta_4&=24R^4+5R^3-10R^2-5R-14,\qquad
+\beta_5=120R^5+26R^4-15R^3-85R^2-105R+59 .
+\end{aligned}
+\end{equation}
+Since $h_1(w)=w$, one has $B_1=1$; hence $\beta_m(1)=0$ for $m\ge1$. The values $\beta_m(6)$, $m\le5$, can also be recomputed directly from \eqref{eq:Frec}; a recipe is given in the proof of \cref{lem:certificate}.
+
+\begin{remark}
+\Cref{thm:beta} is a statement in $\Z[R]$, and it is proved in $\Z[R]$. It is not deduced from the integrality of the values $\beta_m(r)$ at integers $r$, which would only give an integer-valued polynomial.
+\end{remark}
+
+\subsection{Localization}
+
+\begin{proposition}[Localization]\label{prop:localization}
+For every integer $r\ge2$, $B_r,S_r\in\Z[1/r][[t]]$.
+\end{proposition}
+
+\begin{proof}
+Let $p\nmid r$. Then $1/r\in\Z_p$. The polynomial $\binom Xq$ maps the non-negative integers into $\Z$, so by density and continuity it maps $\Z_p$ into $\Z_p$; hence $\binom{1/r}q\in\Z_p$ and $h_r\in\Z_p[[w]]$. The iterates $y_n$ then lie in $\Z_p[[t]]$, and $B_{r,n}=r^ny_{n+1}/t^n$ does too, since division by $t^n$ is exact. Therefore $B_r\in\Z_p[[t]]$. Then $S_r=\sum_k\binom{1/r}{k}(B_r-1)^k\in\Z_p[[t]]$, because $(1+X)^{1/r}=\exp(r^{-1}\log(1+X))=\sum_k\binom{1/r}kX^k$ formally. A rational number that is $p$-integral for every $p\nmid r$ lies in $\Z[1/r]$.
+\end{proof}
+
+For $p\nmid r$ this gives only $v_p(s_{r,m})\ge0$. Numerators are not studied here.
+
+%======================================================================
+\section{Exact laws at the non-exceptional primes}\label{sec:nonexc}
+%======================================================================
+
+We use the logarithm of $S_r$ in divided powers. Two elementary inequalities are needed: for a prime $p$, $i\ge1$ and $q\ge1$,
+\begin{equation}\label{eq:legendre}
+v_p((i+1)!)\le\frac{i}{p-1},\qquad v_p(q)\le\frac{q-1}{p-1}.
+\end{equation}
+The first follows from Legendre's formula $v_p(N!)=(N-s_p(N))/(p-1)$, where $s_p(N)\ge1$ is the base-$p$ digit sum. The second follows from $q\ge p^{v_p(q)}\ge1+(p-1)v_p(q)$.
+
+\begin{theorem}[Odd non-exceptional primes]\label{thm:odd}
+Let $p$ be an odd prime dividing $r$, $a=v_p(r)$, $r=p^au$ with $p\nmid u$, and assume $p\ge5$ or $a\ge2$. Then for all $m\ge0$
+\[
+p^{2am}\,m!\,s_{r,m}\equiv\Bigl(\frac{r-1}{2u^2}\Bigr)^m\pmod p,
+\]
+and the right-hand side is a $p$-adic unit. Hence $-v_p(s_{r,m})=2am+v_p(m!)$.
+\end{theorem}
+
+\begin{proof}
+Let $Y(x)=B_r(p^{2a}x)-1=\sum_{i\ge1}\tilde b_ix^i$. By \cref{thm:beta},
+\[
+\tilde b_i=p^{2ai}b_{r,i}=\frac{\beta_i(r)\,p^{ai}}{(i+1)!\,u^i},\qquad v_p(\tilde b_i)\ge ai-v_p((i+1)!).
+\]
+Put $L(x)=r^{-1}\log(1+Y)=\sum_{q\ge1}(-1)^{q-1}Y^q/(qr)$ and $\ell_m=\hc mL$ (in the variable $x$). Each composition $i_1+\cdots+i_q=m$ with $i_j\ge1$ contributes $m!\,(-1)^{q-1}(qr)^{-1}\prod_j\tilde b_{i_j}$ to $\ell_m$. By \eqref{eq:legendre} its valuation is at least
+\[
+v_p(m!)-a-v_p(q)+\sum_j\bigl(ai_j-v_p((i_j+1)!)\bigr)\ \ge\ a(m-1)+v_p(m!)-\frac{2m-1}{p-1},
+\]
+because $\sum_jv_p((i_j+1)!)\le m/(p-1)$ and $v_p(q)\le(m-1)/(p-1)$. For $m\ge2$ this is positive: if $p\ge5$, then $a(m-1)\ge m-1>(2m-1)/4$; if $p=3$ and $a\ge2$, then $2(m-1)>(2m-1)/2$. Valuations are integers, so each contribution, and hence $\ell_m$, lies in $p\Z_{(p)}$ for $m\ge2$. For $m=1$, \cref{prop:first} gives $\ell_1=\tilde b_1/r=p^{2a}(r-1)/(2r^2)=(r-1)/(2u^2)$, a unit since $p\mid r$ and $p$ is odd. Finally $\ell_0=0$. Thus $L\in\Hur^+_{\Z_{(p)}}$ and $L\equiv\ell_1x\pmod p$. Since $S_r(p^{2a}x)=\exp L$, \cref{lem:hurwitz}(iv) gives $\exp L\equiv\exp(\ell_1x)\pmod p$, that is, $p^{2am}m!\,s_{r,m}=\hc m\exp L\equiv\ell_1^m$. For $m=0$ both sides equal $1$.
+\end{proof}
+
+\begin{theorem}[The prime $2$]\label{thm:dyadic}
+Let $2\mid r$, $a=v_2(r)$, $r=2^au$ with $u$ odd. Then for all $m\ge0$
+\[
+2^{(2a+1)m}\,m!\,s_{r,m}\equiv\Bigl(\frac{r-1}{u^2}\Bigr)^m\equiv1\pmod 2,
+\]
+hence $-v_2(s_{r,m})=(2a+1)m+v_2(m!)$. For $r=2$ this is $4m-s_2(m)$.
+\end{theorem}
+
+\begin{proof}
+Let $Y(x)=B_r(2^{2a+1}x)-1=\sum\tilde b_ix^i$. By \cref{thm:beta}, $\tilde b_i=\beta_i(r)2^{(a+1)i}/((i+1)!\,u^i)$, so $v_2(\tilde b_i)\ge(a+1)i-v_2((i+1)!)\ge ai$. In $L=r^{-1}\log(1+Y)$, a composition of $m$ into $q$ parts contributes to the \emph{ordinary} coefficient $[x^m]L$ a term of valuation at least $am-a-v_2(q)=a(m-1)-v_2(q)\ge0$, because $v_2(q)\le q-1\le m-1$ and $a\ge1$. So $[x^m]L\in\Z_{(2)}$, and $\ell_m=m![x^m]L\in2\Z_{(2)}$ for $m\ge2$. Also $\ell_1=2^{2a+1}b_{r,1}/r=(r-1)/u^2$ is odd. As before, $\exp L\equiv\exp(\ell_1x)\pmod2$. For $r=2$, Legendre's formula gives $3m+v_2(m!)=4m-s_2(m)$.
+\end{proof}
+
+\begin{remark}
+Here $p\mid r$, and for odd $p$ the hypotheses of \cref{thm:odd} are in force. At $m=1$ the exponents are $2a+1$ ($p=2$) and $2a$ ($p$ odd); at $m=2$ they are $4a+3$ and $4a$. This agrees with $s_{r,1}$ and $s_{r,2}$ in \cref{prop:first}; for $p=3$ and $a\ge2$, use $v_3(r+3)=1$. For $3\parallel r$ the exponent at $m=2$ is $\max\{0,4-v_3(u+1)\}$ (\cref{sec:simple3}). An earlier route to \cref{thm:odd,thm:dyadic} used the coefficient recurrence $rs_{r,m}=b_{r,m}-[t^m]\bigl(S_r^r-1-r(S_r-1)\bigr)$ and a divided-power lemma. The logarithmic route above also treats the case $p=3$ below.
+\end{remark}
+
+%======================================================================
+\section{The simple prime \texorpdfstring{$3$}{3} and the global classification}\label{sec:simple3}
+%======================================================================
+
+Let $u$ be an indeterminate, $r=3u$, and $A=\Zloc[u,u^{-1}]$. For $f=\sum_ec_eu^e\in\Q[u,u^{-1}]$ let $\vG(f)=\min_ev_3(c_e)$ be the Gauss ($3$-adic content) valuation. It is multiplicative (Gauss' lemma), and $A=\{f:\vG(f)\ge0\}$. For $e\in\Z$ we write $f\in3^eA$ if $\vG(f)\ge e$. Congruences in $A$ are coefficientwise; they are \emph{symbolic}, before any evaluation of $u$. Specializing $R\mapsto3u$ in \cref{prop:formal} gives $B_{3u},S_{3u}\in\Q[u,u^{-1}][[t]]$. Put
+\[
+H_u(y)=S_{3u}(9y)=\sum_{m\ge0}W_m(u)\frac{y^m}{m!},\qquad W_m(u)=9^m\,m!\,s_{3u,m},
+\]
+\[
+L_u(y)=\log H_u(y)=\sum_{m\ge1}\kappa_m(u)\frac{y^m}{m!}.
+\]
+If $u$ is a positive integer prime to $3$ and $r=3u$, then $W_m(u)$ is the specialization, and $v_3(s_{r,m})=v_3(W_m(u))-2m-v_3(m!)$.
+
+\begin{proposition}[Cumulants of low order]\label{prop:kappa}
+One has $\kappa_m\in u^{-(m+1)}\Zloc[u]$ with numerator of degree $\le m$ for all $m\ge1$, $\kappa_m\in3A$ for $m\ge3$, and
+\[
+\kappa_1=\frac{3u-1}{2u^2},\qquad \kappa_2=\frac{45u^2+18u-11}{4u^3},\qquad \kappa_3=\frac{27(3u-1)(9u^2+5u+2)}{4u^4}.
+\]
+In particular $\kappa_1\equiv u^{-2}$ and $\kappa_2\equiv u^{-3}\pmod{3A}$.
+\end{proposition}
+
+\begin{proof}
+Write $Y=B_{3u}(9y)-1=\sum \tilde b_iy^i$, so $\tilde b_i=9^ib_{3u,i}=3^i\beta_i(3u)/((i+1)!\,u^i)$. Here $\beta_i(3u)\in\Z[u]$ has degree $\le i$ by \cref{thm:beta}, and $\vG(\tilde b_i)\ge i-v_3((i+1)!)$. Then $L_u=(3u)^{-1}\log(1+Y)$. Exactly as in the proof of \cref{thm:odd} with $p=3$, $a=1$, and with $\vG$ in place of $v_p$, a composition of $m$ contributes to $\kappa_m=\hy mL_u$ an element of Gauss valuation at least $(m-1)+v_3(m!)-(2m-1)/2=v_3(m!)-\tfrac12$. For $m\ge3$ this is at least $\tfrac12$, hence each contribution, and $\kappa_m$, lies in $3A$. Each $\tilde b_i$ is $u^{-i}$ times a polynomial of degree $\le i$, so a product over a composition of $m$ is $u^{-m}$ times a polynomial of degree $\le m$, and the factor $(3u)^{-1}$ adds $u^{-1}$. The explicit formulas follow from $\beta_1=R-1$, $\beta_2=2(R^2-1)$, $\beta_3=(R^2-1)(6R+1)$ and
+\[
+\kappa_1=\frac{\tilde b_1}{3u},\qquad \kappa_2=\frac{2}{3u}\Bigl(\tilde b_2-\frac{\tilde b_1^2}2\Bigr),\qquad \kappa_3=\frac{6}{3u}\Bigl(\tilde b_3-\tilde b_1\tilde b_2+\frac{\tilde b_1^3}{3}\Bigr).
+\]
+For example $\tilde b_1=3(3u-1)/(2u)$ and $\tilde b_2=3(9u^2-1)/u^2$, so $\tilde b_2-\tilde b_1^2/2=3(45u^2+18u-11)/(8u^2)$. Finally, $-1/2\equiv1$ and $-11/4\equiv1\pmod 3$.
+\end{proof}
+
+\begin{theorem}[Symbolic normal form]\label{thm:normalform}
+For all $m\ge0$, $W_m\in A$, and $F_m(u):=u^{2m}W_m(u)\in\Zloc[u]$ with $\deg F_m\le2m-1$ for $m\ge1$. Symbolically,
+\[
+W_m\equiv u^{-2m}\Bigl(1+u\binom m2\Bigr)\pmod{3A},\qquad F_m\equiv1+u\binom m2\pmod{3\Zloc[u]} .
+\]
+After evaluation at a unit $u\in\Z_3^\times$, where $u^2\equiv1\pmod 3$, this becomes $W_m(u)\equiv1+u\binom m2\pmod 3$.
+\end{theorem}
+
+\begin{proof}
+By \cref{lem:hurwitz}(iii), $W_m=\hy m\exp L_u=\sum_\pi\prod_{B\in\pi}\kappa_{|B|}$ over set partitions $\pi$ of $\{1,\dots,m\}$, so $W_m\in A$. A partition with $k$ blocks contributes $u^{-(m+k)}$ times a polynomial of degree $\le m$. Since $1\le k\le m$, the product $u^{2m}\cdot u^{-(m+k)}=u^{m-k}$ is a polynomial, and the contribution to $F_m$ has degree $\le2m-k\le2m-1$. Modulo $3A$, \cref{prop:kappa} and \cref{lem:hurwitz}(iv) give $L_u\equiv u^{-2}y+u^{-3}y^{[2]}$. Hence only partitions into blocks of sizes $1$ and $2$ survive. There are $\binom m{2q}(2q-1)!!$ partitions with $q$ blocks of size $2$, and this number is divisible by $3$ for $q\ge2$. The terms $q=0,1$ give $u^{-2m}+\binom m2u^{-2(m-2)-3}$. The statement for $F_m$ follows since $3A\cap\Zloc[u]=3\Zloc[u]$. Evaluation at a unit is a ring homomorphism $A\to\Z_3$ mapping $3A$ into $3\Z_3$.
+\end{proof}
+
+\begin{remark}[Symbolic versus pointwise]\label{rem:laurent}
+The pointwise form must not be read as an identity in $A/3A=\F_3[u,u^{-1}]$. Already $W_1=\kappa_1\equiv u^{-2}\not\equiv1$ there. In particular the pointwise congruence must not be differentiated with respect to $u$. Derivatives are computed below from the factorization in $\Z_3[u]$.
+\end{remark}
+
+\begin{theorem}[Exceptional roots and deficits]\label{thm:roots}
+\leavevmode
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item If $m\not\equiv2\pmod3$, then $F_m(u)\in1+3\Z_3$ for every $u\in\Z_3$, and $W_m(u)\in\Z_3^\times$ for every $u\in\Z_3^\times$.
+\item If $m=3n+2$, then $F_m$ has exactly one root $\alpha_n$ in $\Z_3$. It is simple, $\alpha_n\in D=-1+3\Z_3$, and $F_m=(u-\alpha_n)Q_n$ with $Q_n\in\Z_3[u]$, $Q_n\equiv1$ coefficientwise modulo $3$. Hence
+\[
+v_3(F_m(u))=v_3(u-\alpha_n)\ (u\in\Z_3),\qquad v_3(W_m(u))=v_3(u-\alpha_n)\ (u\in\Z_3^\times),
+\]
+and $W_m'(u)\equiv1\pmod3$ for $u\in D$. Moreover $\alpha_0=-1$.
+\item For fixed $n$ and $K\ge1$ there are infinitely many positive integers $u\equiv-1\pmod3$ with $v_3(u-\alpha_n)=K$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) If $m\equiv0,1\pmod3$, then $3\mid\binom m2$, so $F_m\equiv1$ coefficientwise. (ii) If $m=3n+2$, then $\binom m2\equiv1$ and $\overline{F_m}=1+u$ in $\F_3[u]$. Since $F_m\in\Zloc[u]\subset\Z_3[u]$, $F_m(-1)\equiv0$ and $F_m'(-1)\equiv1\pmod 3$, Hensel's lemma \cite[Ch.~I, \S6.4]{Robert2000} gives a unique root $\alpha_n\equiv-1\pmod 3$. Any root $\xi\in\Z_3$ satisfies $1+\bar\xi=0$, so $\xi=\alpha_n$. Division by the monic $u-\alpha_n$ gives $Q_n\in\Z_3[u]$. Reducing modulo $3$, $(u+1)\overline{Q_n}=1+u$ in the domain $\F_3[u]$, so $\overline{Q_n}=1$. Thus $Q_n(u)\in1+3\Z_3$ for all $u\in\Z_3$, which gives the valuation identities; for $u$ a unit, $v_3(u^{-2m})=0$. Write $W_m=(u-\alpha_n)\cdot u^{-2m}Q_n$. For $u\in D$, the derivative of $u^{-2m}Q_n$ is a Laurent polynomial over $\Z_3$ evaluated at a unit, hence integral, and it is multiplied by $u-\alpha_n\in3\Z_3$. The remaining term is $u^{-2m}Q_n(u)\equiv(-1)^{-2m}=1$. Finally $F_2=(u+1)(3u-1)(15u-1)/4$ (\cref{prop:kappa}: $W_2=\kappa_1^2+\kappa_2$), so $\alpha_0=-1$. (iii) Choose a positive integer $u\equiv\alpha_n\pmod{3^K}$, adding $3^K$ if necessary so that $u\not\equiv\alpha_n\pmod{3^{K+1}}$, and add multiples of $3^{K+1}$.
+\end{proof}
+
+For $r=3u$ with $3\nmid u$ and $m=3n+2$, the signed valuation is therefore
+\begin{equation}\label{eq:signed}
+-v_3(s_{r,m})=2m+v_3(m!)-v_3(u-\alpha_n),
+\end{equation}
+and the correction vanishes when $u\equiv1\pmod 3$, since then $u-\alpha_n\equiv2\pmod 3$. For $m=2$, \eqref{eq:signed} says $v_3(s_{r,2})=v_3(u+1)-4$, which can be read off directly from $s_{r,2}=(r-1)(r+3)(5r-1)/(24r^4)$.
+
+\begin{corollary}[Non-vanishing]\label{cor:nonvanishing}
+For all integers $r\ge2$ and $m\ge0$, $s_{r,m}\ne0$. In particular no $\alpha_n$ is a positive integer.
+\end{corollary}
+
+\begin{proof}
+If $r$ has a prime divisor $p\ne3$, \cref{thm:dyadic} ($p=2$) or \cref{thm:odd} ($p\ge5$) gives $v_p(s_{r,m})<\infty$. Otherwise $r=3^a$. If $a\ge2$, use \cref{thm:odd}. If $a=1$, then $u=1\equiv1\pmod 3$, and \cref{thm:roots} gives $v_3(W_m(1))=0$ for all $m$. If $\alpha_n=u_0$ were a positive integer, then $u_0\equiv-1\pmod3$ and $r=3u_0\ge6$ would give $s_{r,3n+2}=0$.
+\end{proof}
+
+\begin{remark}
+The argument uses only the exact laws; no positivity of the $s_{r,m}$ is used or claimed. The restriction to positive integers matters. As a function of $u\in\Z_3$, $W_{3n+2}$ does vanish at $u=\alpha_n$; for example $W_2(-1)=0$, corresponding to $r=-3$. The convention $v_3(0)=+\infty$ is needed only for such parametric statements.
+\end{remark}
+
+\begin{proof}[Proof of \cref{thmA}]
+By \cref{prop:localization}, only primes $p\mid r$ can divide $\den(s_{r,m})$. By \cref{cor:nonvanishing}, $s_{r,m}\neq0$, so $\den(s_{r,m})=\prod_{p\mid r}p^{\max\{0,-v_p(s_{r,m})\}}$. The values of $-v_p(s_{r,m})$ are given by \cref{thm:dyadic}, \cref{thm:odd}, \cref{thm:roots}(i) together with \cref{thm:normalform}, and \eqref{eq:signed}. Only in the last case can $-v_p$ be negative. The statements about $v_3(u-\alpha_n)$ are \cref{thm:roots}(iii) and the remark after \eqref{eq:signed}.
+\end{proof}
+
+\begin{example}\label{ex:726}
+Take $r=726=2\cdot3\cdot11^2$ and $m=2$. Then $u=242\equiv-1\pmod 3$ and $v_3(u+1)=5$, so $v_3(s_{726,2})=+1$ and $3$ does not divide $\den(s_{726,2})$. Indeed $s_{726,2}=7893075/(2^7\cdot11^8)$, with exponents $7=(2\cdot1+1)\cdot2+1$ and $8=2\cdot2\cdot2$.
+\end{example}
+
+%======================================================================
+\section{The cumulant filtration}\label{sec:cumulants}
+%======================================================================
+
+The construction of $\rho$ needs a strong symbolic bound on the cumulants $\kappa_m\in A$. The bound $\kappa_m\in3A$ of \cref{prop:kappa} is not enough, because we shall divide by $q!$. Put
+\[
+d_q=\frac{\kappa_{q+1}}{q!}\quad(q\ge0),\qquad\text{so }d_0=\kappa_1,\ d_1=\kappa_2 .
+\]
+Since $H_u'=L_u'H_u$, \cref{lem:hurwitz}(i) gives the moment recurrence
+\begin{equation}\label{eq:momrec}
+W_{m+1}=\sum_{q=0}^m\binom mq\kappa_{q+1}W_{m-q}=\sum_{q=0}^md_q\,\fall mq\,W_{m-q}\qquad(m\ge0).
+\end{equation}
+
+\begin{theorem}[Cumulant filtration]\label{thm:filtration}
+For $m\ge3$, $\kappa_m\in3^{m-2-v_3(m)}A$. Consequently $d_2\in27A$, and for $q\ge3$
+\[
+d_q\in3^{\omega_q}A,\qquad \omega_q=q-1-v_3(q+1)-v_3(q!)\ge1,\qquad \omega_q\ge\frac{q-1}2-\log_3(q+1)\xrightarrow[q\to\infty]{}\infty .
+\]
+\end{theorem}
+
+The proof occupies the rest of this section. All series are in $\Q[u,u^{-1}][[y]]$ or $\Q[u,u^{-1}][[z]]$, and Hurwitz rings are taken over $\mathcal O=A$. For the iterates of \cref{prop:formal} with $R=3u$ put
+\[
+Y_j(y)=y_{j+1}(9y),\qquad Z_j(y)=\frac3u\,y\,Y_j(y)\qquad(j\ge0),
+\]
+so $Y_0=1$, $\ord Z_j=j+1$, and, since $h_{3u}(3u\,Z)=\sum_q\lambda_q(3u)Z^q/q!$,
+\begin{equation}\label{eq:Yrec}
+Y_{j+1}=\sum_{q\ge1}\lambda_q(3u)\frac{Z_j^q}{q!},\qquad\lambda_q(3u)=\prod_{i=1}^{q-1}(3ui-1)\in\Z[u].
+\end{equation}
+(The $\lambda_q(3u)$ need not be units of $A$; integrality is all that is used.)
+
+\begin{lemma}[Divisibility of the iterates]\label{lem:iterdiv}
+For all $j,m\ge0$, $\hy mY_j\in3^mA$, and for $m\ge1$, $\hy mZ_j\in3^m\,m\,A=3^{m+v_3(m)}A$.
+\end{lemma}
+
+\begin{proof}
+Induction on $j$. For $Y_0=1$ the claim is clear. If it holds for $Y_j$, then $\hy mZ_j=\frac3u\,m\,\hy{m-1}Y_j\in3\cdot m\cdot3^{m-1}A$. By \cref{lem:hurwitz}(ii), $\hy m(Z_j^q/q!)$ is a sum of products $\prod_B\hy{|B|}Z_j$ over partitions of $\{1,\dots,m\}$, each in $3^{\sum|B|}A=3^mA$. Now use \eqref{eq:Yrec}; the sum is finite in each degree.
+\end{proof}
+
+\begin{lemma}[Convolution gain]\label{lem:convolution}
+Let $Z\in\Hur_A^+$ with $z_k=\hy kZ\in3^k\,k\,A$ for all $k\ge1$. Then for $m,q\ge1$
+\[
+\hy m\frac{Z^q}{q!}\in3^{\,m+v_3(q)-v_3(m)}A .
+\]
+\end{lemma}
+
+\begin{proof}
+Group the partitions in \cref{lem:hurwitz}(ii) by their block-size multiplicities $(n_k)_{k\ge1}$, with $\sum n_k=q$ and $\sum kn_k=m$. Writing $z_k=3^kk\,a_k$, $a_k\in A$, one gets
+\[
+\hy m\frac{Z^q}{q!}=\sum_{(n_k)}\frac{m!}{\prod_k(k!)^{n_k}n_k!}\prod_kz_k^{n_k}
+=3^m\sum_{(n_k)}C_{(n_k)}\prod_ka_k^{n_k},\qquad C_{(n_k)}=\frac{m!}{\prod_k((k-1)!)^{n_k}\,n_k!}.
+\]
+Factor $C=\dfrac{m!}{q!\prod_k((k-1)!)^{n_k}}\cdot\dfrac{q!}{\prod_kn_k!}$. The first factor is a multinomial coefficient, because $q+\sum_k(k-1)n_k=m$. Call the second factor $M$. For every $k$ with $n_k>0$, $n_kM/q=(q-1)!/\bigl((n_k-1)!\prod_{l\ne k}n_l!\bigr)\in\Z$. Let $g=\gcd(q,n_1,n_2,\dots)$ and write $g=c_0q+\sum c_kn_k$ with $c_i\in\Z$. Then $gM/q=c_0M+\sum_kc_kn_kM/q\in\Z$, so $(q/g)\mid M$. Since $g\mid\sum kn_k=m$, we get $v_3(C)\ge v_3(M)\ge v_3(q)-v_3(g)\ge v_3(q)-v_3(m)$.
+\end{proof}
+
+\begin{lemma}[Logarithmic telescoping]\label{lem:telescope}
+Let $G_{3u}(z)=\log\bigl(h_{3u}(3u\,z)/z\bigr)=\sum_{q\ge1}g_q(3u)z^{[q]}$; the argument of the logarithm is $\sum_q\lambda_q(3u)z^{q-1}/q!$, with constant term $1$. Then
+\[
+L_u(y)=\frac1{3u}\sum_{j\ge0}G_{3u}\bigl(Z_j(y)\bigr),
+\]
+and the sum is finite in each degree.
+\end{lemma}
+
+\begin{proof}
+Put $\Pi_j=Y_j/((3/u)y)^j$. Then $\Pi_j=B_{3u,j}(9y)$, since $(3u)^j/(9y)^j=((3/u)y)^{-j}$, and $\Pi_0=1$. By \eqref{eq:Yrec}, $\Pi_{j+1}/\Pi_j=Y_{j+1}/Z_j=h_{3u}(3u\,Z_j)/Z_j$. So $\log\Pi_n=\sum_{j<n}G_{3u}(Z_j)$. As $n\to\infty$, $\Pi_n\to B_{3u}(9y)$ with exact stabilization in each degree (\cref{prop:formal}). Moreover $G_{3u}(Z_j)$ has order $\ge j+1$. Multiply by $(3u)^{-1}$.
+\end{proof}
+
+\begin{lemma}[Bernoulli base and deformation]\label{lem:bernoulli}
+Let $G_0(z)=\log\bigl((1-e^{-z})/z\bigr)$. Then $\hc qG_0=B_q/q$ for $q\ge1$, where $B_q$ are the Bernoulli numbers ($z/(e^z-1)=\sum B_qz^{[q]}$). Hence $\hc1G_0=-1/2$, $\hc qG_0=0$ for odd $q>1$, and $v_3(\hc qG_0)=-1-v_3(q)$ for even $q\ge2$. Moreover $G_{3u}-G_0\in\Hur_A$, so
+\[
+g_q(3u)\in3^{-1-v_3(q)}A\ \ (q\ge2\text{ even}),\qquad g_q(3u)\in A\ \ (q\text{ odd}).
+\]
+\end{lemma}
+
+\begin{proof}
+$G_0'(z)=\frac1{e^z-1}-\frac1z=\sum_{q\ge1}B_q\frac{z^{q-1}}{q!}$; integrating with $G_0(0)=0$ gives $G_0=\sum_qB_q\frac{z^q}{q\cdot q!}$. Odd Bernoulli numbers beyond $B_1$ vanish. For even $q\ge2$, the von Staudt–Clausen theorem \cite[Ch.~15, \S1, Thm.~3, p.~233]{IrelandRosen1990} states that $B_q+\sum_{(\ell-1)\mid q}1/\ell\in\Z$ over primes $\ell$; since $(3-1)\mid q$, $v_3(B_q)=-1$.
+
+For the deformation put $r=3u$ and $\varphi(z)=-\log(1-rz)/(rz)=1+\sum_{d\ge1}\frac{r^d}{d+1}z^d$, and $w=z\varphi(z)=-r^{-1}\log(1-rz)$. Then $e^{-w}=(1-rz)^{1/r}$, so $1-e^{-w}=h_r(rz)$, and the formal identity
+\[
+G_r(z)=G_0\bigl(z\varphi(z)\bigr)+\log\varphi(z)
+\]
+holds. The Hurwitz coefficient of degree $d\ge1$ of $\varphi-1$ is $3^du^d\,d!/(d+1)$, of Gauss valuation $d+v_3(d!)-v_3(d+1)\ge1$: for $d=1$ it is $1$, and for $d\ge2$ we have $v_3(d+1)\le d-1$. So $\varphi-1\in3\Hur_A^+$. By \cref{lem:hurwitz}(ii) the Hurwitz coefficients of $(\varphi-1)^\ell/\ell!$ lie in $3^\ell A$, hence $\log\varphi\in3\Hur_A$ by \cref{lem:hurwitz}(iii). For $q\ge1$,
+\[
+\varphi^q-1=\sum_{\ell=1}^q\binom q\ell\,\ell!\,\frac{(\varphi-1)^\ell}{\ell!}\in3^{1+v_3(q)}\Hur_A,
+\]
+because $v_3\binom q\ell\ge v_3(q)-v_3(\ell)$ and $\ell-v_3(\ell)\ge1$. Now
+\[
+G_0(z\varphi)-G_0(z)=\sum_{q\ge1}\hc qG_0\cdot z^{[q]}\bigl(\varphi^q-1\bigr).
+\]
+Since $z^{[q]}\in\Hur_\Z$, the $q$-th term lies in $\Hur_A$: for even $q$ the loss $-1-v_3(q)$ is compensated by $3^{1+v_3(q)}$; for $q=1$ the coefficient is $-1/2$; for odd $q>1$ it is $0$. The term has order $\ge q+1$, so the sum is finite in each degree. Hence $G_r-G_0\in\Hur_A$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:filtration}]
+By \cref{lem:telescope}, $\kappa_m=\hy mL_u=(3u)^{-1}\sum_j\sum_qg_q(3u)\,\hy m(Z_j^q/q!)$, a finite sum for fixed $m$. By \cref{lem:iterdiv}, each $Z_j$ satisfies the hypothesis of \cref{lem:convolution}. For even $q$, the three factors have Gauss valuations at least $-1$, $-1-v_3(q)$ and $m+v_3(q)-v_3(m)$, with total $m-2-v_3(m)$. For odd $q$ the total is at least $m-1-v_3(m)$. This proves the bound on $\kappa_m$.
+
+For $q=2$ this bound gives only $d_2\in A$. The exact formula of \cref{prop:kappa} gives $d_2=\kappa_3/2=27(3u-1)(9u^2+5u+2)/(8u^4)\in27A$. For $q\ge3$, $d_q=\kappa_{q+1}/q!\in3^{\omega_q}A$ with $\omega_q$ as stated. Legendre's formula gives $v_3(q!)\le(q-1)/2$. Also $2v_3(q+1)\le q-2$ for $q\ge3$: this is trivial if $v_3(q+1)=0$; if $v_3(q+1)=1$ then $q\ge5$; if $v_3(q+1)=e\ge2$ then $q\ge3^e-1$ and $3^e-3\ge2e$. Hence $\omega_q\ge q-1-\frac{q-2}2-\frac{q-1}2=\frac12$, so $\omega_q\ge1$. Finally $v_3(q+1)\le\log_3(q+1)$ gives the lower bound tending to infinity.
+\end{proof}
+
+\begin{remark}
+The general bound is sharp in several degrees; for instance the Gauss valuation of $d_q$ equals $\omega_q$ for $q=3,5,9$ (\cref{sec:examples}). So there is no room to use it at $q=2$, and the exact value of $\kappa_3$ is essential there.
+\end{remark}
+
+On the disc $D$, \cref{thm:normalform} gives the pointwise residues
+\begin{equation}\label{eq:residues}
+W_{3n}(u)\equiv W_{3n+1}(u)\equiv1,\qquad W_{3n+2}(u)\equiv0\pmod 3\qquad(u\in D).
+\end{equation}
+
+\medskip\noindent\textit{Comparison with Kallat's interpolation formula.}
+This paragraph compares the family with \cite[Thm.~12.1]{Kallat2026a}. It gives a second derivation of the index law and is not used elsewhere in the paper.
+Fix first $u\in\Q\cap D$. By \cref{prop:kappa}, $\kappa_1\equiv1$ and $\kappa_2\equiv-1\pmod3$ at such $u$. By \cref{thm:filtration}, for $m\ge4$, $v_3(\kappa_m/m!)\ge(m-3)/2-v_3(m)>0$, since $v_3(m!)\le(m-1)/2$ and $2v_3(m)\le m-4$; the explicit $\kappa_3$ covers $m=3$. Hence $L_u-y+y^2/2\in3y\Zloc[[y]]$ and $V=\exp(L_u-y+y^2/2)\in1+3y\Zloc[[y]]$.
+For $C=\{1\}\cup\{2\cdot3^j:j\ge1\}$ put $F_C=\exp(\sum_{d\in C}y^d/d)$, and let $E_3(s)=\exp(\sum_{j\ge0}s^{3^j}/3^j)$ be the Artin--Hasse exponential. Comparison of logarithms gives $H_u=F_C\,T_u$ with $T_u=V\,E_3(y^2)^{-1/2}$. The coefficients of $E_3$ and the binomial coefficients for the exponent $-1/2$ belong to $\Zloc$ \cite[Ch.~IV, \S2.3 and Ch.~VII, \S\S2.1--2.2]{Robert2000}, so $T_u\in\Zloc[[y]]$.
+In $F_C=\prod_m(1-y^m)^{-c_m}$ \cite[Lemma~8.1]{Kallat2026a}, writing $m=3^ab$ with $3\nmid b$, M\"obius inversion gives $mc_m=\mu(b)$ for $a=0$, $mc_m=\mathbf 1_{2\mid b}\,\mu(b/2)-\mu(b)$ for $a=1$ (the first term is omitted for odd $b$), and $mc_m=0$ for $a\ge2$. In particular $c_3=-1/3$ and $c_6=1/3$. The factors with $v_3(c_m)<0$ have $a=1$ and $v_3(c_m)=-1$. In the normalization of \cite[\S8.8]{Kallat2026a}, the factor of degree $3$ has efficiency $1/2$, and every other such factor has degree at least $6$ and efficiency at most $1/4$.
+
+Put $b_n^*=\binom{n-1-1/3}{n}=[y^{3n}](1-y^3)^{1/3}$, write $H_u(y)(1-y^3)^{-1/3}=\sum_{k\ge0}h_ky^k$, and for $c=0,1,2$ let
+\[
+ f_c(z)=\sum_{t\ge0}h_{3t+c}\prod_{i=0}^{t-1}\frac{3(z-i)}{-1+3(z-1-i)} .
+\]
+This is the function that \cite[Thm.~12.1]{Kallat2026a} attaches to the residue class $c$ and the factor of degree $3$. That theorem shows that $f_c$ is locally analytic on $\Z_3$ and that $[y^{3n+c}]H_u=b_n^*f_c(n)$ for $n\ge0$. Since $v_3((3n+c)!)=-v_3(b_n^*)=n+v_3(n!)$, we get $v_3(W_{3n+c}(u))=v_3(f_c(n))$. By \eqref{eq:residues} and continuity, $f_0(z)$ is a unit for every $z\in\Z_3$. Since $b_{n+1}^*/b_n^*=(3n-1)/(3n+3)$, the ratios $W_{3n+c}/W_{3n}$, $c=1,2,3$, are the values at $z=n$ of
+\[
+ (3z+1)\frac{f_1(z)}{f_0(z)},\qquad
+ (3z+1)(3z+2)\frac{f_2(z)}{f_0(z)},\qquad
+ (3z+1)(3z+2)(3z-1)\frac{f_0(z+1)}{f_0(z)} .
+\]
+
+For the index law put $u=-1+3w$, and let $O=\Z_3\langle w\rangle$ be the ring of restricted power series over $\Z_3$. On $O[1/3]$ and on $O\langle z\rangle=\Z_3\langle z,w\rangle$ we write $\vG$ for the minimum of the valuations of the coefficients. The substitution maps $A$ into $O$, and the estimates above hold over $O$, so $V\in1+3yO[[y]]$; we keep the definitions of $h_k$ and $f_c$. The non-integral factors of $F_C$ other than the one of degree $3$ have degree at least $6$, and $\lambda$ copies of one of them cost $\lambda+v_3(\lambda!)$. Hence $\vG(h_k)\ge-N-v_3(N!)$ for $N=\lfloor k/6\rfloor$. The denominators $-1+3(z-1-i)$ are units of $\Z_3\langle z,w\rangle$, so for $k=3t+c$ the $t$-th term of $f_c$ has Gauss valuation at least $t-\lfloor t/2\rfloor-v_3(\lfloor t/2\rfloor!)$. This bound tends to infinity and is at least $2$ for $t\ge3$. Thus $f_c\in\Z_3\langle z,w\rangle$, and at $z=n\in\N$ the finite convolution still gives $[y^{3n+c}]H_u=b_n^*f_c(n)$, now for every $w\in\Z_3$.
+The same bound is at least $1$ for $t\ge1$, so $h_0=1$ gives $f_0\in1+3\Z_3\langle z,w\rangle$. The geometric series $\sum_{\ell\ge0}(1-f_0)^\ell$ converges to $f_0^{-1}$ in this algebra. The shift $z\mapsto z+1$ preserves the Tate algebra, so all three ratio interpolants belong to $\Z_3\langle z,w\rangle$.
+
+Take $c=2$. By \cref{prop:kappa}, $h_2=W_2/2$ gives $h_2/3\equiv-w\pmod{3O}$. Through degree $5$ the coefficients of $\exp(y-y^2/2)(1-y^3)^{-1/3}$ are $1,1,0,0,1/4,1/20$, so $h_5\equiv-1\pmod{3O}$, and the term $t=1$ divided by $3$ is $\equiv z$. Let $I\in O[[y]]$ be obtained from $\sum_kh_ky^k$ by removing the remaining factors $(1-y^m)^{-c_m}$ with $v_3(c_m)<0$. The only such factor of degree at most $8$ is the one of degree $6$, so $h_8=[y^8]I+c_6h_2\in O$, and the term $t=2$ lies in $9\Z_3\langle z,w\rangle$. Therefore
+\[
+ \frac{f_2(z,w)}3=z-w+3R(z,w),\qquad R\in\Z_3\langle z,w\rangle .
+\]
+For fixed $w\in\Z_3$, the map $z\mapsto w-3R(z,w)$ is a contraction of $\Z_3$ with a unique fixed point $e(w)$, and every difference quotient in $z$ of $f_2/3$ lies in $1+3\Z_3$. Hence
+\[
+ v_3\bigl(W_{3n+2}(-1+3w)\bigr)=1+v_3\bigl(n-e(w)\bigr)\qquad(n\in\N,\ w\in\Z_3).
+\]
+This is the valuation formula of \cref{corC}, and comparison with \cref{cor:index}(iii) along $n\in\N$ gives $e(w)=\eta(-1+3w)$.
+
+These are interpolations in the disc coordinates $z=n$ and $w=(u+1)/3$, by elements of the Tate algebra $\Z_3\langle z,w\rangle$. The construction of \cref{sec:ratios} gives integral formal control in the coordinates $x=3n$ and $v=u+1$, by series in $\Z_3[[x,v]]$. An element $\sum_{i,j}q_{ij}z^iw^j$ of $\Z_3\langle z,w\rangle$ comes from $\Z_3[[x,v]]$ under $x=3z$, $v=3w$ exactly when $3^{i+j}$ divides $q_{ij}$ for all $i,j$. The estimates above do not establish this divisibility for the ratio interpolants. What this comparison recovers is the joint interpolation of the three ratios on the bidisc and the index law above. The integral series $\sB,\sC,\sT$ and $\rho$, and the reduction $\rho\equiv-1/(1+x)\pmod3$, are obtained in \cref{sec:ratios}.
+
+%======================================================================
+\section{Interpolation of the moment ratios and of the exceptional roots}\label{sec:ratios}
+%======================================================================
+
+\subsection{The ring and its shifts}
+Let $\RR=\Z_3[[x,v]]$ with maximal ideal $\mm=(3,x,v)$. It is a complete, separated, noetherian local ring, and its ideals are closed. Since $-1+v$ is a unit of $\Z_3[[v]]$, the assignment $u\mapsto-1+v$ defines a ring homomorphism $\iota\colon A\to\Z_3[[v]]\subset\RR$, with $\iota(u^{-1})=-\sum_{k\ge0}v^k$. It maps $3^eA$ into $3^e\RR$. For $h\in\Z$, the substitution $x\mapsto x-3h$, $v\mapsto v$ extends to a continuous endomorphism $\tau_h$ of $\RR$, because $x-3h\in\mm$. It satisfies $\tau_h(\mm^k)\subset\mm^k$ for all $k$ and all $h$, $\tau_h\tau_{h'}=\tau_{h+h'}$, $\tau_h$ is the identity on $\iota(A)$, and $\tau_h(f)\equiv f\pmod{3\RR}$. For $x_0,v_0\in3\Z_3$, evaluation $\ev_{(x_0,v_0)}\colon\RR\to\Z_3$ is a continuous ring homomorphism. It satisfies $\ev_{(x_0,v_0)}\circ\tau_h=\ev_{(x_0-3h,v_0)}$ and $\ev_{(x_0,v_0)}\circ\iota=(\text{evaluation of Laurent polynomials at }u_0=-1+v_0\in D)$. These identities hold on polynomials, and both sides are continuous.
+
+\subsection{The ratio system}
+Let $\cT=\{(\sB,\sC,\sT)\in\RR^3:\sB\equiv1,\ \sC\equiv0,\ \sT\equiv1\pmod\mm\}$; for such a triple, $\sT$ and all $\tau_h\sT$ are units. Every integer $\sigma\le0$ can be written uniquely as $\sigma=i-3h$ with $i\in\{0,1,2\}$ and $h\ge0$. Put $V_0=1$, $V_1=\sB$, $V_2=\sC$ and
+\[
+\cP_\sigma[\sB,\sC,\sT]=\tau_h(V_i)\prod_{\ell=1}^h\tau_\ell(\sT)^{-1},\qquad
+\Theta_c[\sB,\sC,\sT]=\sum_{q\ge2}\iota(d_q)\,\fall{x+c}q\,\cP_{c-q}[\sB,\sC,\sT]\quad(c=0,1,2).
+\]
+By \cref{thm:filtration}, the $q$-th term of $\Theta_c$ lies in $3^{\omega_q}\RR\subset\mm^{\omega_q}$ (with $\omega_2:=3$). Since $\omega_q\to\infty$, the series converges $\mm$-adically, and $\Theta_c\in3\RR$. When evaluated at $x=3n$, $\cP_\sigma$ will represent $W_{3n+\sigma}/W_{3n}$.
+
+\begin{theorem}[Ratio system]\label{thm:system}
+There is a unique triple $(\sB,\sC,\sT)\in\cT$ such that
+\begin{equation}\label{eq:system}
+\begin{aligned}
+\sB&=\iota(\kappa_1)+x\,\iota(\kappa_2)\,\tau_1(\sC)\,\tau_1(\sT)^{-1}+\Theta_0[\sB,\sC,\sT],\\
+\sC&=\iota(\kappa_1)\,\sB+(x+1)\,\iota(\kappa_2)+\Theta_1[\sB,\sC,\sT],\\
+\sT&=\iota(\kappa_1)\,\sC+(x+2)\,\iota(\kappa_2)\,\sB+\Theta_2[\sB,\sC,\sT].
+\end{aligned}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For $X=(\sB,\sC,\sT)\in\cT$ define $\Phi(X)=(\sB^+,\sC^+,\sT^+)$ \emph{sequentially}. Here $\sB^+$ is the right-hand side of the first equation evaluated at $X$. Then $\sC^+=\iota(\kappa_1)\sB^++(x+1)\iota(\kappa_2)+\Theta_1[X]$ and $\sT^+=\iota(\kappa_1)\sC^++(x+2)\iota(\kappa_2)\sB^++\Theta_2[X]$. Modulo $\mm$ one has $x\equiv0$, $\Theta_c\equiv0$, $\iota(\kappa_1)\equiv1$ and $\iota(\kappa_2)\equiv-1$, from $\kappa_1\equiv u^{-2}$, $\kappa_2\equiv u^{-3}$ and $u\mapsto-1$. Hence $\sB^+\equiv1$, $\sC^+\equiv1-1=0$ and $\sT^+\equiv-2\equiv1$, so $\Phi(\cT)\subset\cT$.
+
+Let $X,\tilde X\in\cT$ with $X\equiv\tilde X\pmod{\mm^k}$, $k\ge1$. Shifts preserve $\mm^k$. Inverses of units satisfy $\sT^{-1}-\tilde\sT^{-1}=\sT^{-1}(\tilde\sT-\sT)\tilde\sT^{-1}$. Products differ by telescoping sums. Hence $\cP_\sigma[X]\equiv\cP_\sigma[\tilde X]\pmod{\mm^k}$ for all $\sigma\le0$. Each term of $\Theta_c[X]-\Theta_c[\tilde X]$ lies in $3\mm^k\subset\mm^{k+1}$, and $\mm^{k+1}$ is closed, so $\Theta_c[X]\equiv\Theta_c[\tilde X]\pmod{\mm^{k+1}}$. In $\sB^+$ the remaining dependence on $X$ is multiplied by $x\in\mm$, so $\sB^+\equiv\tilde\sB^+\pmod{\mm^{k+1}}$. Since $\sC^+$ uses $\sB^+$ rather than $\sB$, also $\sC^+\equiv\tilde\sC^+$; similarly $\sT^+\equiv\tilde\sT^+\pmod{\mm^{k+1}}$. A simultaneous update would not have this property. Starting from $X_0=(1,0,1)$, the iterates satisfy $X_{k+1}\equiv X_k\pmod{\mm^{k+1}}$. They converge in the closed set $\cT$, and the limit is a fixed point, since $\Phi$ is continuous by the same estimate. A fixed point of $\Phi$ is exactly a solution of \eqref{eq:system}. If $X,X'$ are two solutions in $\cT$, then $X\equiv X'\pmod\mm$, and repeated application of the estimate gives $X\equiv X'\pmod{\mm^k}$ for all $k$; so $X=X'$ by Krull's intersection theorem.
+\end{proof}
+
+\subsection{Identification, including the boundary}
+
+\begin{proposition}[Identification]\label{prop:ident}
+For $u_0\in D$, $v_0=u_0+1$ and $n\ge0$,
+\[
+\sB(3n,v_0)=\frac{W_{3n+1}(u_0)}{W_{3n}(u_0)},\qquad \sC(3n,v_0)=\frac{W_{3n+2}(u_0)}{W_{3n}(u_0)},\qquad \sT(3n,v_0)=\frac{W_{3n+3}(u_0)}{W_{3n}(u_0)} .
+\]
+At $x=0$, as series in $v$: $\sB(0,v)=\iota(\kappa_1)$, $\sC(0,v)=\iota(\kappa_1^2+\kappa_2)=\iota(W_2)$, $\sT(0,v)=\iota(\kappa_1^3+3\kappa_1\kappa_2+\kappa_3)=\iota(W_3)$.
+\end{proposition}
+
+\begin{proof}
+Write $w_m=W_m(u_0)$ and $\ev_n=\ev_{(3n,v_0)}$. By \eqref{eq:residues}, the $w_{3n}$ are units. We prove the three identities by induction on $n$. Let $\sigma=c-q$ with $c\in\{0,1,2\}$, $q\ge2$, and write $\sigma=i-3h$.
+\begin{itemize}[leftmargin=*]
+\item If $3n+\sigma<0$, then $0\le3n+c<q$ and $\fall{3n+c}q=0$ exactly. The corresponding term of $\ev_n(\Theta_c)$ vanishes. The factor $\ev_n(\cP_\sigma)\in\Z_3$ is well defined, so nothing undefined is multiplied by zero, and no values $W_m$ with $m<0$ are used.
+\item If $3n+\sigma\ge0$, then $n-h\ge0$, and $h\ge1$ unless $\sigma=0$, in which case $\cP_0=1$. Using $\ev_n\circ\tau_\ell=\ev_{n-\ell}$ and the identities for indices $<n$,
+\[
+\ev_n(\cP_\sigma)=\frac{w_{3(n-h)+i}}{w_{3(n-h)}}\prod_{\ell=1}^h\frac{w_{3(n-\ell)}}{w_{3(n-\ell+1)}}=\frac{w_{3n+\sigma}}{w_{3n}} .
+\]
+\end{itemize}
+The same computation applies to the term $\tau_1(\sC)\tau_1(\sT)^{-1}=\cP_{-1}$ when $n\ge1$; for $n=0$ it is multiplied by $x=0$. Evaluate the first equation of \eqref{eq:system} with $\ev_n$; this is continuous, so it passes through the series $\Theta_0$. We obtain $\ev_n(\sB)=\bigl(\kappa_1w_{3n}+3n\,\kappa_2w_{3n-1}+\sum_{q\ge2}d_q\fall{3n}qw_{3n-q}\bigr)/w_{3n}$, with all $\kappa,d$ evaluated at $u_0$ and terms with negative index omitted. By \eqref{eq:momrec} with $m=3n$, this is $w_{3n+1}/w_{3n}$. The second equation involves $\ev_n(\sB)$, now known, and $\cP_\sigma$ with $\sigma\le-1$, which use earlier blocks. By \eqref{eq:momrec} with $m=3n+1$ it gives $w_{3n+2}/w_{3n}$. In the third equation, the $q=2$ term has $\cP_0=1$ and the others use earlier blocks; \eqref{eq:momrec} with $m=3n+2$ gives $w_{3n+3}/w_{3n}$.
+
+At $x=0$, as series in $v$, the term $x\,\iota(\kappa_2)\cdots$ vanishes, and $\fall{c}{q}=0$ for $q>c$. So $\Theta_0(0,v)=\Theta_1(0,v)=0$ and $\Theta_2(0,v)=2\,\iota(d_2)=\iota(\kappa_3)$. This gives the three formulas at $x=0$; by \cref{lem:hurwitz}(iii) they are $\iota(W_1)$, $\iota(W_2)$, $\iota(W_3)$.
+\end{proof}
+
+\subsection{Reduction modulo 3}
+
+\begin{proposition}[Reduced equation]\label{prop:reduced}
+In $\RR/3\RR=\F_3[[x,v]]$, with $\bar u=-1+v$,
+\[
+\overline{\sC}\Bigl(1-\frac{x\,\bar\kappa_1\bar\kappa_2}{\overline{\sT}}\Bigr)=\bar u^{-4}\bigl(1+(1+x)\bar u\bigr).
+\]
+Consequently $\sC=U\cdot\bigl(1+(1+x)\iota(u)\bigr)+3E$ with $E\in\RR$ and the unit $U=\iota(u)^{-4}\bigl(1-x\,\iota(\kappa_1\kappa_2)\sT^{-1}\bigr)^{-1}\in\RR^\times$.
+\end{proposition}
+
+\begin{proof}
+Modulo $3$ (not modulo $\mm$), $\Theta_c\equiv0$, $\tau_h\equiv\mathrm{id}$, and $\bar\kappa_1=\bar u^{-2}$, $\bar\kappa_2=\bar u^{-3}$ \emph{symbolically} (\cref{prop:kappa}). The first two equations of \eqref{eq:system} become $\overline\sB=\bar u^{-2}+x\bar u^{-3}\overline\sC/\overline\sT$ and $\overline\sC=\bar u^{-2}\overline\sB+(1+x)\bar u^{-3}$. Eliminating $\overline\sB$ gives the identity, since $\bar u^{-4}+(1+x)\bar u^{-3}=\bar u^{-4}(1+(1+x)\bar u)$. The factor $1-x\bar\kappa_1\bar\kappa_2/\overline\sT$ has constant term $1$, so it is a unit, and so is its lift. Multiply by its inverse and lift: $\sC-U(1+(1+x)\iota(u))\in3\RR$, and $\RR$ is torsion-free.
+\end{proof}
+
+\subsection{The root series}
+
+\begin{theorem}[Interpolating root]\label{thm:rho}
+There is a unique $\rho\in\Z_3[[x]]$ with $\rho(0)=-1$ and $\sC\bigl(x,\rho(x)+1\bigr)=0$. In fact it is unique among $\rho\in\Z_3[[x]]$ with $\rho(0)\equiv-1\pmod3$. It satisfies
+\[
+\rho(x)=-\frac1{1+x}+3x\,\chi(x)\ \ (\chi\in\Z_3[[x]]),\qquad \rho(3n)=\alpha_n\ \ (n\ge0).
+\]
+The function $\alpha(z)=\rho(3z)=\sum_k\rho_k3^kz^k$ converges uniformly on $\Z_3$, and it is the unique continuous function on $\Z_3$ with $\alpha(n)=\alpha_n$. With $\gamma(z)=-1/(1+3z)$ and $\cA=\{\sum c_kz^k:v_3(c_k)\ge k\}$ one has $\gamma\in\cA$ and $\alpha-\gamma\in3\cA$.
+\end{theorem}
+
+\begin{proof}
+By \cref{prop:ident} and \cref{prop:kappa}, $\sC(0,v)=\iota(W_2)=(3u-1)(u+1)(15u-1)/(4u^4)$ with $u=-1+v$. This is $v$ times the unit $(-4+3v)(-16+15v)/(4(1-v)^4)$ of $\Z_3[[v]]$. In particular $\sC(0,0)=0$ and $\partial_v\sC(0,0)=(-4)(-16)/4=16\in\Z_3^\times$.
+
+Write $\sC=\sum_{i,k}c_{ik}x^iv^k$ and look for $V=\rho+1=\sum_{d\ge0}V_dx^d$. For $V\in\Z_3[[x]]$ with $V(0)\in3\Z_3$, the substitution $v\mapsto V(x)$ is a continuous homomorphism $\RR\to\Z_3[[x]]$, and $\sC(x,V)$ has constant term $\sC(0,V_0)=V_0\cdot(\text{unit})$. So a root forces $V_0=0$. For $V_0=0$, the coefficient of $x^d$ in $\sC(x,V(x))$ is $16V_d$ plus an integral polynomial in $V_1,\dots,V_{d-1}$: $V_d$ can only enter through $c_{01}V$, because $V^k$ has order $\ge k$. Dividing by the unit $16$ determines $V_d\in\Z_3$ recursively and uniquely. This is a formal implicit-function argument; no analytic statement is used.
+
+Substitute $V$ into \cref{prop:reduced}; $\iota(u)$ becomes $\rho$. The substituted $U$ has constant term $U(0,0)\in\Z_3^\times$, so reduction modulo $3$ gives $1+(1+x)\bar\rho=0$ in $\F_3[[x]]$, that is, $\rho+1/(1+x)\in3\Z_3[[x]]$. Both $\rho$ and $-1/(1+x)$ have constant term $-1$, hence $\rho+1/(1+x)\in3x\Z_3[[x]]$.
+
+For $n\ge0$, $3n\in3\Z_3$, so $\rho(3n)$ converges and $\rho(3n)\equiv\rho(0)=-1\pmod 3$. Evaluating $\sC(x,V(x))=0$ at $x=3n$ gives $\sC(3n,\rho(3n)+1)=0$. Composition is compatible with evaluation, since both maps are continuous homomorphisms that agree on $x$ and $v$. By \cref{prop:ident}, $W_{3n+2}(\rho(3n))=0$ with $W_{3n}(\rho(3n))$ a unit. So $F_{3n+2}(\rho(3n))=0$ and $\rho(3n)=\alpha_n$ by \cref{thm:roots}(ii).
+
+The coefficients $\rho_k3^k$ of $\alpha(z)$ have valuation $\ge k$, so the series converges uniformly on $\Z_3$ and $\alpha$ is continuous. Uniqueness of a continuous interpolation follows from the density of $\N$ in $\Z_3$. Next, $\gamma(z)=-\sum_k(-3z)^k\in\cA$. Finally, $\alpha(z)-\gamma(z)=9z\,\chi(3z)=\sum_k3^{k+2}\chi_kz^{k+1}$ has coefficients of valuation $\ge(k+1)+1$ and constant term $0$.
+\end{proof}
+
+\begin{remark}
+(i) The series $\rho$ itself is only claimed to converge on $3\Z_3$; we make no statement about $\rho(x)$ for $x\in\Z_3^\times$. (ii) $\rho$ is also the unique element of $\Z_3[[x]]$ with $\rho(3n)=\alpha_n$ for all $n$. Indeed, if $f\in\Z_3[[x]]$ vanishes at all $3n$, then $g(z)=f(3z)=\sum g_kz^k$ has coefficients $g_k\to0$, vanishes on $\N$, and hence, by continuity and density, on $\Z_3$. If $g\ne0$, let $k_0$ be minimal with $g_{k_0}\ne0$. For $N$ large and $|z|=1$, the term $g_{k_0}(3^Nz)^{k_0}$ strictly dominates all others, so $g(3^Nz)\neq0$, a contradiction. (iii) No convergence or analyticity of $n\mapsto\alpha_n$ was assumed: the identification $\rho(3n)=\alpha_n$ uses only the uniqueness in \cref{thm:roots}.
+\end{remark}
+
+\begin{remark}[Raw moments at $u=-1$ and the class $\cA$]\label{rem:raw}
+This explains why we interpolate ratios rather than raw moments. At $u=-1$ the raw values $W_{3n+2}(-1)$, $n=0,1,2,3$, are $\equiv0,204,156,72\pmod{243}$. Their third difference is $\equiv216$, of valuation $3$. By \cref{lem:mahler} below, no element of $\cA$ takes these values at $0,1,2,3$, since that would force valuation $\ge3+v_3(3!)=4$. This excludes an interpolation of $n\mapsto W_{3n+2}(-1)$ by an element of the weighted class $\cA$; it does not exclude other normalizations or other classes of interpolating functions, which we have not examined. The ratios are the construction used here. The normalized ratios $\sC(3n,0)=W_{3n+2}(-1)/W_{3n}(-1)$ are $\equiv0,195,84,72$, with third difference $\equiv162$, of valuation $4$; this is only a consistency check, since the regularity of the ratios follows from \cref{thm:system,prop:ident}. These residues are reproduced exactly in \cref{sec:examples}.
+\end{remark}
+
+\subsection{The index form of the deficits}
+
+\begin{corollary}[Isometry and index form]\label{cor:index}
+Let $\rho_1=[x^1]\rho$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item For $z\ne w$ in $\Z_3$, $\dfrac{\alpha(z)-\alpha(w)}{3(z-w)}=\rho_1+\sum_{k\ge2}3^{k-1}\rho_k\sum_{i=0}^{k-1}z^{k-1-i}w^i\equiv1\pmod 3$; hence $v_3(\alpha(z)-\alpha(w))=1+v_3(z-w)$.
+\item $\alpha\colon\Z_3\to D$ is a bijection. Its inverse is $\eta(u)=J(u+1)/3$, where $J\in v\Z_3[[v]]$ is the compositional inverse of $\rho(x)+1$.
+\item For $u\in D$ and $n\ge0$, $v_3(W_{3n+2}(u))=1+v_3(n-\eta(u))$, both sides being $+\infty$ exactly when $n=\eta(u)$.
+\item Let $u$ be a positive integer with $u\equiv-1\pmod 3$, and $r=3u$. Then $\eta(u)\notin\N$, and for $m=3n+2$
+\[
+-v_3(s_{r,m})=2m+v_3(m!)-1-v_3\bigl(n-\eta(u)\bigr).
+\]
+For $K\ge1$, the deficit $v_3(W_{3n+2}(u))$ is $\ge K$ exactly when $n\equiv\eta(u)\pmod{3^{K-1}}$, and equal to $K$ exactly when moreover $n\not\equiv\eta(u)\pmod{3^K}$. These sets of indices $n$ have natural density $3^{-(K-1)}$ and $2\cdot3^{-K}$ among all $n\ge0$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(i) $\alpha(z)-\alpha(w)=\sum_{k\ge1}\rho_k3^k(z^k-w^k)$, and $z^k-w^k=(z-w)\sum_iz^{k-1-i}w^i$ with integral inner sums. The series converges, and $\rho_1\equiv[x^1](-1/(1+x))=1\pmod 3$ by \cref{thm:rho}.
+
+(ii) Put $f(z)=(\alpha(z)+1)/3$. Then $f$ maps $\Z_3$ into $\Z_3$ and $|f(z)-f(w)|=|z-w|$. For each $k$, $f$ induces a well-defined injective map of $\Z/3^k\Z$ into itself, which is therefore bijective. Given $y\in\Z_3$, the unique classes $c_k\bmod3^k$ with $f(c_k)\equiv y\pmod{3^k}$ are compatible, and their limit $c$ satisfies $f(c)=y$. So $f$, and hence $\alpha\colon\Z_3\to D$, is bijective. Alternatively, $\rho+1$ has constant term $0$ and unit linear coefficient, so it has a compositional inverse $J\in v\Z_3[[v]]$. For $v_0=u+1\in3\Z_3$, $J(v_0)\in3\Z_3$, and evaluation commutes with composition (continuity of the substitution homomorphisms), so $\rho(J(v_0))=u$. Hence $\alpha(J(u+1)/3)=u$.
+
+(iii) By \cref{thm:roots}(ii), $v_3(W_{3n+2}(u))=v_3(u-\alpha_n)=v_3(\alpha(\eta(u))-\alpha(n))$, and (i) applies.
+
+(iv) If $\eta(u)=n\in\N$, then $s_{3u,3n+2}=0$, contradicting \cref{cor:nonvanishing}. The formula is \eqref{eq:signed} combined with (iii). The density statements hold for any fixed residue class modulo $3^{K-1}$, respectively for the difference of two nested classes. They concern the \emph{signed} deficit, not the truncated exponent $\max\{0,\cdot\}$, and densities are taken among the exceptional indices $m=3n+2$.
+\end{proof}
+
+\begin{remark}
+\Cref{cor:index} is a direct consequence of \cref{thm:roots,thm:rho}; it adds no new input. Its role is to show that the exceptional branch can be described equally well by zeros in the parameter or by zeros in the index. The comparison at the end of \cref{sec:cumulants} gives a second derivation of the index law (iii) from the explicit series in \cite[Thm.~12.1]{Kallat2026a}. The proof above does not use it; it uses the parameter factorization and the integral root series of \cref{thm:roots,thm:rho}.
+\end{remark}
+
+%======================================================================
+\section{Finite differences and the pointwise law}\label{sec:mahler}
+%======================================================================
+
+\begin{lemma}[Finite differences of monomials]\label{lem:mahler}
+Let $\Delta f(z)=f(z+1)-f(z)$ be the forward difference. For $j\ge0$ and $k\ge0$, $\Delta^jz^k\big|_{z=0}=\sum_{i=0}^j(-1)^{j-i}\binom jii^k=j!\,S(k,j)$, where $S(k,j)\in\Z_{\ge0}$ is a Stirling number of the second kind, with $S(k,j)=0$ for $k<j$ and $S(j,j)=1$. Consequently, if $f(z)=\sum c_kz^k\in\cA$, then $v_3(\Delta^jf(0))\ge j+v_3(j!)$, and if $f\in3\cA$ then $v_3(\Delta^jf(0))\ge j+v_3(j!)+1$.
+\end{lemma}
+
+\begin{proof}
+By inclusion–exclusion, the alternating sum counts surjections from a $k$-set onto a $j$-set, which number $j!S(k,j)$. Since $\Delta^j$ at $0$ is a finite linear combination of values, it passes through the uniformly convergent series: $\Delta^jf(0)=j!\sum_{k\ge j}c_kS(k,j)$, and $v_3(c_k)\ge k\ge j$.
+\end{proof}
+
+\begin{theorem}[Mahler law]\label{thm:mahler}
+For every $j\ge1$,
+\[
+\frac{\Delta^j\alpha_0}{3^j\,j!}=\rho_j+\sum_{k>j}3^{k-j}\rho_k\,S(k,j)\equiv\rho_j\equiv(-1)^{j+1}\pmod 3,\qquad\text{so}\qquad v_3(\Delta^j\alpha_0)=j+v_3(j!).
+\]
+\end{theorem}
+
+\begin{proof}
+Apply \cref{lem:mahler} to $\alpha(z)=\sum_k\rho_k3^kz^k$ and divide by $3^jj!$. Each $3^{k-j}\rho_kS(k,j)$ with $k>j$ lies in $3\Z_3$. By \cref{thm:rho}, $\rho\equiv-1/(1+x)=\sum_j(-1)^{j+1}x^j\pmod3$.
+\end{proof}
+
+\begin{remark}
+(i) The normalization matters. Dividing by $3^{j+v_3(j!)}$ instead of $3^jj!$ multiplies the residue by the unit $j!/3^{v_3(j!)}$. (ii) The model $\gamma_n=-1/(1+3n)$ has, by induction on $j$, $\Delta^j\gamma_0=(-1)^{j+1}3^jj!\big/\prod_{k=0}^j(1+3k)$. Its valuation and residue are the same as those of $\alpha$, as also follows from $\alpha-\gamma\in3\cA$ and \cref{lem:mahler}. (iii) The deduction from \cref{thm:rho} is classical (Mahler, Amice; \cite{Mahler1958,Amice1964,Robert2000}). The content of \cref{thm:mahler} lies in the existence of $\rho$ for this specific family.
+\end{remark}
+
+\subsection{A finite certificate and the pointwise law}
+The constant $\chi(0)\bmod3$ is not determined by the reduction $\rho\equiv-1/(1+x)$. We obtain it from a single exact coefficient. This is one rational computation, used as a step of the proof; no pattern is extrapolated from data.
+
+\begin{lemma}[Certificate]\label{lem:certificate}
+One has $s_{6,5}=24199859/(2^{18}3^8)$. Hence
+\[
+W_5(2)=9^5\cdot5!\cdot s_{6,5}=\frac{3266980965}{32768},\qquad v_3(W_5(2))=3.
+\]
+\end{lemma}
+
+\begin{proof}
+By \cref{thm:beta} and \eqref{eq:betas}, $b_{6,m}=\beta_m(6)/((m+1)!\,6^m)$, where $\beta_m(6)=1$, $5$, $70$, $1295$, $31780$, $959945$ for $m=0,\dots,5$. These six integers can be recomputed from \eqref{eq:Frec} without the interpolation of \cref{sec:examples}. Write $\psi_{n,N}=\hc N\Psi_n$ at $R=6$, so $\psi_{0,1}=1$, $\psi_{0,N}=0$ for $N\ne1$, and $\beta_m(6)=\psi_{n,m+1}$ for $n\ge m$; it suffices to work up to $N=6$ and $n=5$. Counting partitions by the block that contains the first label, $P_{n;D,q}=\hc D(\Psi_n^q/q!)$ satisfies
+\[
+P_{n;0,0}=1,\qquad P_{n;D,0}=0\ (D\ge1),\qquad P_{n;D,q}=\sum_{k=1}^{D-q+1}\binom{D-1}{k-1}\psi_{n,k}\,P_{n;D-k,q-1}\quad(q\ge1),
+\]
+and, since $z^kz^{[D]}=\frac{(D+k)!}{D!}z^{[D+k]}$, \eqref{eq:Frec} gives
+\[
+\psi_{n+1,N}=\sum_{q\ge1,\ D\ge q}\lambda_q(6)\,\frac{N!}{D!}\,P_{n;D,q},\qquad D=N-n(q-1).
+\]
+The rows $(\psi_{n,1},\dots,\psi_{n,6})$ for $n=1,\dots,5$ are
+\[
+\begin{aligned}
+&(1,5,55,935,21505,623645),\quad (1,5,70,1235,29980,895895),\quad (1,5,70,1295,31480,949145),\\
+&(1,5,70,1295,31780,958145),\quad (1,5,70,1295,31780,959945),
+\end{aligned}
+\]
+and the last row is $(\beta_0(6),\dots,\beta_5(6))$. That is,
+\[
+b_{6,m}=1,\ \tfrac5{12},\ \tfrac{35}{108},\ \tfrac{1295}{5184},\ \tfrac{1589}{7776},\ \tfrac{191989}{1119744}\qquad(m=0,\dots,5).
+\] Comparing coefficients of $t^{m-1}$ in $rB_rS_r'=B_r'S_r$ (from $S_r^r=B_r$) gives the recurrence
+\begin{equation}\label{eq:srec}
+s_{r,m}=\frac1{rm}\sum_{i=1}^m\bigl(i-r(m-i)\bigr)\,b_{r,i}\,s_{r,m-i}\qquad(m\ge1).
+\end{equation}
+With $r=6$ it gives successively
+\[
+s_{6,m}=1,\ \tfrac5{72},\ \tfrac{145}{3456},\ \tfrac{58115}{2239488},\ \tfrac{11973961}{644972544},\ \tfrac{24199859}{1719926784}\qquad(m=0,\dots,5),
+\]
+and $1719926784=2^{18}3^8$. Finally $9^5\cdot120/3^8=1080$ and $1080\cdot24199859/2^{18}=135\cdot24199859/2^{15}$. Here $135=3^3\cdot5$, and $24199859$ has digit sum $47$, so it is prime to $3$.
+\end{proof}
+
+\begin{theorem}[Pointwise distance to the model]\label{thm:pointwise}
+$\chi(0)\equiv1\pmod 3$. Hence for every $n\ge1$
+\[
+v_3(\alpha_n-\gamma_n)=v_3\bigl(W_{3n+2}(\gamma_n)\bigr)=2+v_3(n),\qquad\gamma_n=-\frac1{1+3n}.
+\]
+For $n=0$ the quantities $\alpha_0-\gamma_0$ and $W_2(\gamma_0)$ are both $0$, of valuation $+\infty$. Moreover, for all $n\ge0$,
+\[
+\alpha_n\equiv3n-1\pmod 9,\qquad \alpha_n\equiv-1+3n+9\binom n2\equiv4^n-2\pmod{27}.
+\]
+\end{theorem}
+
+\begin{proof}
+For $r=6$ we have $u=2\equiv-1\pmod 3$ and $m=5=3\cdot1+2$. By \cref{thm:roots}(ii) and \cref{lem:certificate}, $v_3(2-\alpha_1)=3$, so $\alpha_1\equiv2\pmod{27}$. Now $\gamma_1=-1/4$, and $2-\gamma_1=9/4$ has valuation $2$ with $(2-\gamma_1)/9\equiv1\pmod3$. Hence $\alpha_1-\gamma_1=(\alpha_1-2)+9/4$ has valuation $2$ and $(\alpha_1-\gamma_1)/9\equiv1\pmod 3$. (Modulo $27$: $\gamma_1\equiv20$ and $\alpha_1-\gamma_1\equiv9$.) By \cref{thm:rho}, $\alpha_n-\gamma_n=\rho(3n)+1/(1+3n)=9n\,\chi(3n)$. For $n=1$ this gives $\chi(3)\equiv1\pmod 3$, and since $\chi\in\Z_3[[x]]$, $\chi(3n)\equiv\chi(0)\pmod 3$ for all $n$. So $\chi(0)\equiv1$, every $\chi(3n)$ is a unit, and $v_3(\alpha_n-\gamma_n)=2+v_3(n)$ for $n\ge1$. Since $\gamma_n\in D$, \cref{thm:roots}(ii) gives $v_3(W_{3n+2}(\gamma_n))=v_3(\gamma_n-\alpha_n)$.
+
+For the congruences, $-1/(1+3n)\equiv-1+3n-9n^2\pmod{27}$, and $9n\chi(3n)\equiv9n\pmod{27}$. So $\alpha_n\equiv-1+3n-9n(n-1)\equiv-1+3n+9\binom n2\pmod{27}$, because $-18\equiv9$. Also $4^n=(1+3)^n\equiv1+3n+9\binom n2\pmod{27}$. Modulo $9$ only $-1+3n$ remains; this part uses only $\rho\equiv-1/(1+x)$, not the certificate.
+\end{proof}
+
+\begin{remark}
+Earlier drafts derived $\alpha_1\equiv2\pmod{27}$ from a separate block induction modulo $27$. Here the congruence modulo $27$ is a corollary of \cref{thm:rho} and \cref{lem:certificate}, and no induction modulo $27$ is used.
+\end{remark}
+
+%======================================================================
+\section{Examples, tables and reproducibility}\label{sec:examples}
+%======================================================================
+
+All numbers in this section are exact. They were recomputed by the script \texttt{verificar\_A2.py} in the accompanying \texttt{code} directory (standard library only); its output is \texttt{verificar\_A2.log}. Apart from \cref{lem:certificate}, no table is used in a proof. Finite tables do not prove statements about all indices.
+
+\subsection{Composite root orders} For $m=2$, \cref{thmA} can be checked by hand against $s_{r,2}=(r-1)(r+3)(5r-1)/(24r^4)$:
+\begin{center}
+\begin{tabular}{@{}rlll@{}}
+\toprule
+$r$ & $s_{r,2}$ & reduced denominator & regime at $3$\\
+\midrule
+$6$ & $145/3456$ & $2^7\cdot3^3$ & $u=2\equiv-1$, deficit $v_3(3)=1$\\
+$12$ & $3245/165888$ & $2^{11}\cdot3^4$ & $u=4\equiv1$\\
+$15$ & $259/16875$ & $3^3\cdot5^4$ & $u=5\equiv-1$, deficit $1$\\
+$18$ & $10591/839808$ & $2^7\cdot3^8$ & $v_3(r)=2$\\
+$30$ & $47531/6480000$ & $2^7\cdot3^4\cdot5^4$ & $u=10\equiv1$\\
+$42$ & $42845/8297856$ & $2^7\cdot3^3\cdot7^4$ & $u=14\equiv-1$, deficit $1$\\
+$105$ & $27248/13505625$ & $3^2\cdot5^4\cdot7^4$ & $u=35\equiv-1$, deficit $v_3(36)=2$\\
+$726$ & $7893075/27437936768$ & $2^7\cdot11^8$ & $u=242$, deficit $5>4$: exponent $0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The script checks \cref{thmA} for all $m\le8$ and
+\[
+r\in\{2,3,4,6,9,12,15,18,24,30,42,105,726,1155,2430\}.
+\] The $\alpha_n$ are computed separately from $\rho$, by Newton iteration on the exact polynomials $F_{3n+2}$. As a negative control, the ``uniform'' exponent $2m+v_3(m!)$ would predict $3^4$ for $r=6$, $m=2$, whereas the true exponent is $3$.
+
+\subsection{Exact data for the exceptional branch}
+The polynomials $\beta_m$ in \eqref{eq:betas} were obtained by exact interpolation on $m+1$ values of $R$, which suffices since $\deg\beta_m\le m$ (\cref{thm:beta}). They were confirmed at three further values of $R$, including $R=-1,\tfrac12,-\tfrac53$; the script does this for $m\le26$. The first normalized polynomials are
+\[
+F_1=\tfrac{3u-1}2,\quad F_2=\tfrac{(u+1)(3u-1)(15u-1)}4,\quad F_3=\tfrac{729}{4}u^5+\tfrac{729}{8}u^4+\tfrac{27}{2}u^3-36u^2+\tfrac{21}4u-\tfrac18 .
+\]
+Their reductions are $1$, $1+u$ and $1$, in accordance with \cref{thm:normalform}. The Gauss valuations of $d_q$ for $q=3,\dots,10$ are $1,3,2,4,5,8,4,6$, against the bounds $\omega_q=1,2,2,3,4,3,4,5$. Modulo $3^{10}$, for $n=0,\dots,8$,
+\[
+\alpha_n\equiv59048,\ 3512,\ 29984,\ 38024,\ 3980,\ 53888,\ 11492,\ 55073,\ 42395 .
+\]
+The ratio system was solved in $\RR/\mm^{10}$. The tails $\Theta_c$ were truncated at $q\le18$: the term $q=2$ is kept, with the exact $d_2\in27A$; for $19\le q\le199$ the inequality $\omega_q\ge10$ was checked exactly; and for $q\ge200$, \cref{thm:filtration} gives $\omega_q\ge g(q)=(q-1)/2-\log_3(q+1)$, where $g$ is increasing for $q\ge1$ and $g(200)>94$. So all omitted terms lie in $3^{10}\RR$. The solution reproduces the ratios $W_{3n+c}(u_0)/W_{3n}(u_0)$ modulo $3^{10}$ for six values of $u_0\in D$ and $n\le7$. The coefficients of $\rho$ are, with $[x^i]\rho$ taken modulo $3^{10-i}$,
+\[
+\rho\equiv(59048,\ 3964,\ 4880,\ 1360,\ 293,\ 151,\ 35,\ 13,\ 2,\ 1),
+\]
+so that $\rho_j\equiv(-1)^{j+1}\pmod3$ and $\chi(0)=(\rho_1-1)/3\equiv1\pmod 3$, consistent with \cref{thm:pointwise}. These ten coefficients coincide, at the same precisions, with the output of an earlier script of the project (written by another AI session) that solves the same system; their projections to precision $3^{8-i}$, $i<8$, coincide with a vector computed modulo $(3,x)^8$ in an earlier audit. Separately, the roots $\alpha_n$, $n\le8$, obtained by Newton iteration agree modulo $3^{15}$ with a historical table of roots at the discrete indices $n$, and modulo $3^6$ for $n\le3$ with an older table. These are comparisons with recorded outputs of earlier scripts that share the definitions and some intermediate data with the present one; they are consistency checks, not independent proofs. The finite ranges also confirm \cref{thm:mahler} for $j\le8$, \cref{thm:pointwise} for $n\le8$, the isometry of \cref{cor:index} for $0\le z,w<27$, and \cref{cor:index}(iii) for eight values of $u$.
+
+\subsection{Code availability}
+The accompanying verification script \texttt{verificar\_A2.py} uses only the Python standard library. It supports only its default configuration (moment order $26$, ratio system modulo $\mm^{10}$, roots modulo $3^{20}$); other arguments are rejected before any computation. The script \texttt{conferir\_kallat\_focal\_v0\_9\_1.py} supplies finite checks of the comparison at the end of \cref{sec:cumulants}. Both scripts and reproducibility instructions are included in the accompanying repository. These checks do not establish the universal statements of this paper.
+
+%======================================================================
+\section{Concluding remarks}
+%======================================================================
+The denominators of $S_r=B_r^{1/r}$ are governed by a single polynomial integrality (\cref{thm:beta}) and a divided-power logarithm, with exactly one exceptional branch, at the prime $3$. On that branch the defect is measured by an explicit $3$-adic integral series, and its finite differences and distance to the rational model $-1/(1+3n)$ are exact. The construction in \cref{sec:ratios} uses only the cumulants of this family and the moment recurrence. We do not discuss here to what extent the same ratio construction applies to other moment sequences.
+
+\section*{Declarations}
+
+\subsection*{Use of generative AI}
+The author independently conceived the original radical renormalization construction, identified the initial dyadic denominator pattern with OEIS A120738, and directed the subsequent research. OpenAI's ChatGPT and Codex, and Anthropic's Claude and Claude Code, were used extensively in mathematical exploration, the formulation of results, the development and checking of proofs, computational verification, and literature review. The entire manuscript was drafted and revised using these tools under the author's direction. Further details are provided in the accompanying research provenance record. The author's independent mathematical review of the complete manuscript has not yet been completed. No AI system is listed as an author. The accompanying research provenance record is \texttt{docs/AI\_PROVENANCE.md} in the repository identified below.
+
+\subsection*{Author contributions}
+Patrick E. Scuracchio conceived the original radical renormalization construction and its initial research questions, investigated the quadratic case, identified the dyadic denominator pattern with OEIS A120738, directed the subsequent research, selected problems and verification strategies, and curated the results. The substantial contributions of generative AI to mathematical development, proof construction, verification, and writing are described in the Use of generative AI statement and the accompanying research provenance record.
+
+\subsection*{Funding}
+No specific funding was received for this research.
+
+\subsection*{Competing interests}
+The author declares no competing interests.
+
+\subsection*{Data and code availability}
+The accompanying repository for this version is \url{https://github.com/eupecric/radical-renormalization-padic-laws}. See \cref{sec:examples} and the reproducibility instructions for the scope of the exact-arithmetic verification scripts.
+
+\subsection*{Review status}
+This preliminary research manuscript has not been peer reviewed. The author's independent mathematical review of the complete manuscript has not yet been completed.
+
+\bibliographystyle{amsplain}
+\bibliography{references_A}
+
+\end{document}

@@ -1,0 +1,17 @@
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.toc
+*.synctex.gz
+*.log
+!results/*.log
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+.DS_Store
+*~
